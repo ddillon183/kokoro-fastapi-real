@@ -35,8 +35,7 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/home/appuser/.cargo/bin:$PATH"
 
 # Install dependencies
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv venv --python 3.10 && \
+RUN uv venv --python 3.10 && \
     uv sync --extra cpu
 
 # Copy project files including models
