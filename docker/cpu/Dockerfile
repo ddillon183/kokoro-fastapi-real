@@ -63,3 +63,7 @@ RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
 ENV DEVICE="cpu"
 # Run FastAPI server through entrypoint.sh
 CMD ["./entrypoint.sh"]
+
+# Add to your existing Dockerfile
+RUN apt-get update && apt-get install -y ffmpeg
+
