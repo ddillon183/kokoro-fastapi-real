@@ -1,0 +1,6 @@
+{
+  "build": {
+    "dockerfilePath": "docker/cpu/Dockerfile",
+    "buildContext": "."
+  }
+}
