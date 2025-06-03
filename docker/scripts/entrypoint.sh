@@ -10,5 +10,5 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
     python download_model.py --output api/src/models/v1_0
 fi
 
-# Start FastAPI server
-exec uv run --extra $DEVICE --no-sync python -m uvicorn api.src.main:app --host 0.0.0.0 --port 8880 --log-level debug
+# Start FastAPI server on the correct port (8888 expected by Railway internal networking)
+exec uv run --extra $DEVICE --no-sync python -m uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --log-level debug
