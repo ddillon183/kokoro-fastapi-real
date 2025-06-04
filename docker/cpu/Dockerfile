@@ -37,8 +37,10 @@ ENV PATH="/home/appuser/.cargo/bin:$PATH"
 # Copy requirements.txt and install dependencies
 COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
 
-RUN uv venv --python 3.10 && \
-    uv pip install -r requirements.txt
+RUN python -m venv .venv && \
+    . .venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 # Copy project files including models
 COPY --chown=appuser:appuser api ./api
