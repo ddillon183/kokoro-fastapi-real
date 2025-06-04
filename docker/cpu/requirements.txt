@@ -242,3 +242,6 @@ uvicorn==0.34.0
 win32-setctime==1.2.0 ; sys_platform == 'win32'
     # via loguru
 uvloop==0.19.0
+torch==2.2.2+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
