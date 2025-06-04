@@ -128,6 +128,7 @@ pluggy==1.5.0
     # via pytest
 protobuf==5.29.3
     # via onnxruntime
+psutil
 pycparser==2.22
     # via cffi
 pydantic==2.10.4
