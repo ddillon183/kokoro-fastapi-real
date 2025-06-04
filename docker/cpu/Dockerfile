@@ -34,7 +34,8 @@ COPY --chown=appuser:appuser pyproject.toml ./pyproject.toml
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/home/appuser/.cargo/bin:$PATH"
 
-# Install dependencies
+# Copy requirements.txt and install dependencies
+COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 RUN uv venv --python 3.10 && \
     uv pip install -r requirements.txt
 
