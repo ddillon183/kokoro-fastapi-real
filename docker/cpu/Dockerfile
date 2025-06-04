@@ -36,7 +36,7 @@ ENV PATH="/home/appuser/.cargo/bin:$PATH"
 
 # Install dependencies
 RUN uv venv --python 3.10 && \
-    uv sync --extra cpu
+    uv pip install -r requirements.txt
 
 # Copy project files including models
 COPY --chown=appuser:appuser api ./api
