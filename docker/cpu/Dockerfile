@@ -35,7 +35,8 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH="/home/appuser/.cargo/bin:$PATH"
 
 # Copy requirements.txt and install dependencies
-COPY --chown=appuser:appuser requirements.txt ./requirements.txt
+COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
+
 RUN uv venv --python 3.10 && \
     uv pip install -r requirements.txt
 
