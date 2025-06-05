@@ -57,10 +57,10 @@ ENV PYTHONUNBUFFERED=1 \
     DEVICE=cpu \
     DOWNLOAD_MODEL=true
 
-# Download model if needed (ensure pip install is done first)
+# Download model if enabled
 RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
-    python api/src/download_model.py --output api/src/models/v1_0; \
-    fi
+    python docker/scripts/download_model.py --output api/src/models/v1_0 || echo "Model download failed"; \
+fi
 
 # Start server
 CMD ["./entrypoint.sh"]
