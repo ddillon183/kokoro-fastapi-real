@@ -25,7 +25,7 @@ RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
 USER appuser
-WORKDIR /app
+WORKDIR /app/api/src
 
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
