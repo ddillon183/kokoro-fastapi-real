@@ -53,7 +53,7 @@ ENV PYTHONUNBUFFERED=1 \
 # Download model after code is in place
 ENV DOWNLOAD_MODEL=true
 RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
-    python api/src/download_model.py --output api/src/models/v1_0; \
+    python download_model.py --output api/src/models/v1_0; \
     fi
 
 # Expose port and run the app
