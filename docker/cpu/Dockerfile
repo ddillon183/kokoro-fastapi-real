@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Install system dependencies and check espeak location
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     espeak-ng \
     espeak-ng-data \
@@ -14,36 +14,31 @@ RUN apt-get update && apt-get install -y \
 && mkdir -p /usr/share/espeak-ng-data \
 && ln -s /usr/lib/*/espeak-ng-data/* /usr/share/espeak-ng-data/
 
-# Install UV
+# Install uv package manager
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     mv /root/.local/bin/uv /usr/local/bin/ && \
     mv /root/.local/bin/uvx /usr/local/bin/
 
-# Create non-root user and set permissions
+# Create app user
 RUN useradd -m -u 1000 appuser && \
-    mkdir -p /app/api/src/models/v1_0 && \
+    mkdir -p /app && \
     chown -R appuser:appuser /app
 
 USER appuser
 WORKDIR /app
 
-# Copy requirements and install dependencies
+# Copy requirement files and install dependencies
 COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
 RUN python -m venv .venv && \
-    /app/.venv/bin/pip install --upgrade pip && \
-    /app/.venv/bin/pip install -r requirements.txt
+    . .venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-# Copy project files
+# Copy entire project
 COPY --chown=appuser:appuser api ./api
 COPY --chown=appuser:appuser web ./web
 COPY --chown=appuser:appuser docker/scripts/ ./
-
-# Make entrypoint executable
 RUN chmod +x ./entrypoint.sh
-
-# Install Rust (required for certain dependencies like pyopenjtalk)
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-ENV PATH="/home/appuser/.cargo/bin:$PATH"
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
@@ -53,16 +48,17 @@ ENV PYTHONUNBUFFERED=1 \
     USE_GPU=false \
     PHONEMIZER_ESPEAK_PATH=/usr/bin \
     PHONEMIZER_ESPEAK_DATA=/usr/share/espeak-ng-data \
-    ESPEAK_DATA_PATH=/usr/share/espeak-ng-data \
-    DEVICE=cpu \
-    DOWNLOAD_MODEL=true
+    ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
 
-# Download model if enabled
+# Download model after code is in place
+ENV DOWNLOAD_MODEL=true
 RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
-    python docker/scripts/download_model.py --output api/src/models/v1_0 || echo "Model download failed"; \
-fi
+    python api/src/download_model.py --output api/src/models/v1_0; \
+    fi
 
-# Start server
+# Expose port and run the app
+ENV DEVICE="cpu"
 CMD ["./entrypoint.sh"]
+
 
 
