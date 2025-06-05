@@ -12,6 +12,6 @@ fi
 
 # Start FastAPI server on the correct port (8888) and bind to IPv6
 #!/bin/bash
-exec uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --log-level debug --workers 1 --loop uvloop
+uvicorn main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
 
 RUN chmod +x ./entrypoint.sh
