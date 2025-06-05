@@ -25,7 +25,7 @@ RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
 USER appuser
-WORKDIR /app
+WORKDIR /app/api/src
 
 # Copy dependency files
 COPY --chown=appuser:appuser pyproject.toml ./pyproject.toml
