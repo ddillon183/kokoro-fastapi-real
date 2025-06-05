@@ -11,7 +11,4 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
 fi
 
 # Start FastAPI server on the correct port (8888) and bind to IPv6
-#!/bin/bash
 uvicorn main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
-
-RUN chmod +x ./entrypoint.sh
