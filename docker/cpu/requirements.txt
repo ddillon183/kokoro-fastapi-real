@@ -93,6 +93,7 @@ jsonschema==4.23.0
     # via csvw
 jsonschema-specifications==2024.10.1
     # via jsonschema
+kokoro>=0.9.4
 language-tags==1.2.0
     # via csvw
 loguru==0.7.3
