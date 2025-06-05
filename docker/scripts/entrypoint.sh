@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e
 
-# Check if ffmpeg is installed
+# Check if ffmpeg is installed (for verification during deployment)
 echo "Checking ffmpeg version..."
 ffmpeg -version || { echo "❌ ffmpeg not found"; exit 1; }
+
+# Activate virtual environment
+echo "Activating virtual environment..."
+source /app/api/src/.venv/bin/activate
 
 # Download model if enabled
 if [ "$DOWNLOAD_MODEL" = "true" ]; then
@@ -11,4 +15,5 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
 fi
 
 # Start FastAPI server
+echo "Starting FastAPI server..."
 uvicorn main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
