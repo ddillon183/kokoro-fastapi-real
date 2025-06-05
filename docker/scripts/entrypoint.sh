@@ -11,5 +11,4 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
 fi
 
 # Start FastAPI server on the correct port (8888) and bind to IPv6
-exec uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --log-level debug --workers 4 --loop uvloop
-
+exec uvicorn voices_V1_0.main:app --host 0.0.0.0 --port 8888 --log-level debug --workers 4 --loop uvloop
