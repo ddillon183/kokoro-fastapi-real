@@ -16,4 +16,4 @@ fi
 
 # Start FastAPI server
 echo "Starting FastAPI server..."
-uvicorn main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
+uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
