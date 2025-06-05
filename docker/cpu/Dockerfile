@@ -50,12 +50,6 @@ ENV PYTHONUNBUFFERED=1 \
     PHONEMIZER_ESPEAK_DATA=/usr/share/espeak-ng-data \
     ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
 
-# Download model after code is in place
-ENV DOWNLOAD_MODEL=true
-RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
-    python download_model.py --output api/src/models/v1_0; \
-    fi
-
 # Expose port and run the app
 ENV DEVICE="cpu"
 CMD ["./entrypoint.sh"]
