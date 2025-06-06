@@ -6,9 +6,9 @@ import time
 import numpy as np
 import pandas as pd
 import requests
-from lib.shared_utils import save_json_results
-from lib.shared_plotting import plot_timeline, plot_correlation
-from lib.shared_benchmark_utils import enc, get_text_for_tokens
+from examples.assorted_checks.benchmarks.lib.shared_utils import save_json_results
+from examples.assorted_checks.benchmarks.lib.shared_plotting import plot_timeline, plot_correlation
+from examples.assorted_checks.benchmarks.lib.shared_benchmark_utils import enc, get_text_for_tokens
 
 
 def measure_first_token(
