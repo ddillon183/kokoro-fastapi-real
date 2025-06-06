@@ -3,28 +3,24 @@
 
 import os
 import sys
-import shutil
 from pathlib import Path
 
-from validate_wav import validate_tts
-
 # Get absolute paths
-script_dir = Path(__file__).parent.resolve()
+script_dir = Path(__file__).resolve().parent
 project_root = script_dir.parent.parent
 
-# Add directories to Python path for imports
-sys.path.append(str(script_dir))
-sys.path.append(str(script_dir / "benchmarks"))
+# Add project root to Python path
+sys.path.insert(0, str(project_root))
 
-# Import test scripts
-from benchmark_tts_rtf import main as benchmark_rtf
-from test_formats.test_audio_formats import main as test_formats
-from benchmark_first_token_stream_unified import main as benchmark_stream
-from test_combinations.test_analyze_combined_voices import main as test_voice_analysis
+# Import test scripts using absolute imports
+from examples.assorted_checks.validate_wav import validate_tts
+from examples.assorted_checks.benchmarks.benchmark_tts_rtf import main as benchmark_rtf
+from examples.assorted_checks.test_formats.test_audio_formats import main as test_formats
+from examples.assorted_checks.benchmarks.benchmark_first_token_stream_unified import main as benchmark_stream
+from examples.assorted_checks.test_combinations.test_analyze_combined_voices import main as test_voice_analysis
 
-# Remove directories from path after imports
-sys.path.remove(str(script_dir))
-sys.path.remove(str(script_dir / "benchmarks"))
+# Optional: Remove the path after imports if cleanliness is critical
+# sys.path.pop(0)
 
 
 def ensure_assets_dir():
