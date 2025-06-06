@@ -6,11 +6,11 @@ from typing import AsyncGenerator, Dict, List, Tuple
 
 from loguru import logger
 
-from ...core.config import settings
-from ...structures.schemas import NormalizationOptions
-from .normalizer import normalize_text
-from .phonemizer import phonemize
-from .vocabulary import tokenize
+from api.src.core.config import settings
+from api.src.structures.schemas import NormalizationOptions
+from api.src.services.text_processing.normalizer import normalize_text
+from api.src.services.text_processing.phonemizer import phonemize
+from api.src.services.text_processing.vocabulary import tokenize
 
 # Pre-compiled regex patterns for performance
 CUSTOM_PHONEMES = re.compile(r"(\[([^\]]|\n)*?\])(\(\/([^\/)]|\n)*?\/\))")
