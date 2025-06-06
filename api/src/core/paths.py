@@ -11,7 +11,7 @@ import aiofiles.os
 import torch
 from loguru import logger
 
-from .config import settings
+from api.src.config import settings
 
 
 async def _find_file(
