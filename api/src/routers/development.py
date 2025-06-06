@@ -12,21 +12,21 @@ from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from kokoro import KPipeline
 from loguru import logger
 
-from ..core.config import settings
-from ..inference.base import AudioChunk
-from ..services.audio import AudioNormalizer, AudioService
-from ..services.streaming_audio_writer import StreamingAudioWriter
-from ..services.temp_manager import TempFileWriter
-from ..services.text_processing import smart_split
-from ..services.tts_service import TTSService
-from ..structures import CaptionedSpeechRequest, CaptionedSpeechResponse, WordTimestamp
-from ..structures.custom_responses import JSONStreamingResponse
-from ..structures.text_schemas import (
+from api.src.core.config import settings
+from api.src.inference.base import AudioChunk
+from api.src.services.audio import AudioNormalizer, AudioService
+from api.src.services.streaming_audio_writer import StreamingAudioWriter
+from api.src.services.temp_manager import TempFileWriter
+from api.src.services.text_processing import smart_split
+from api.src.services.tts_service import TTSService
+from api.src.structures import CaptionedSpeechRequest, CaptionedSpeechResponse, WordTimestamp
+from api.src.structures.custom_responses import JSONStreamingResponse
+from api.src.structures.text_schemas import (
     GenerateFromPhonemesRequest,
     PhonemeRequest,
     PhonemeResponse,
 )
-from .openai_compatible import process_and_validate_voices, stream_audio_chunks
+from api.src.routers.openai_compatible import process_and_validate_voices, stream_audio_chunks
 
 router = APIRouter(tags=["text processing"])
 
