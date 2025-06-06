@@ -1,9 +1,10 @@
-from .schemas import (
+from api.src.structures.schemas import (
     CaptionedSpeechRequest,
     CaptionedSpeechResponse,
+    NormalizationOptions,
     OpenAISpeechRequest,
-    TTSStatus,
-    VoiceCombineRequest,
+    PhonemeRequest,
+    PhonemeResponse,
     WordTimestamp,
 )
 
