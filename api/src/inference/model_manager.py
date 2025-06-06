@@ -4,12 +4,11 @@ from typing import Optional
 
 from loguru import logger
 
-from ..core import paths
-from ..core.config import settings
-from ..core.model_config import ModelConfig, model_config
-from .base import BaseModelBackend
-from .kokoro_v1 import KokoroV1
-
+from api.src.core import paths
+from api.src.core.config import settings
+from api.src.core.model_config import ModelConfig, model_config
+from api.src.inference.base import BaseModelBackend
+from api.src.inference.kokoro_v1 import KokoroV1
 
 class ModelManager:
     """Manages Kokoro V1 model loading and inference."""
