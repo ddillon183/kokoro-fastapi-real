@@ -6,7 +6,7 @@ from typing import List, Tuple, Optional
 import requests
 import tiktoken
 
-from .shared_utils import save_audio_file, get_audio_length
+from examples.assorted_checks.benchmarks.lib.shared_utils import save_audio_file, get_audio_length
 
 # Global tokenizer instance
 enc = tiktoken.get_encoding("cl100k_base")
