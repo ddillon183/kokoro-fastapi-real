@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 import phonemizer
 
-from .normalizer import normalize_text
+from api.src.services.text_processing.normalizer import normalize_text
 
 phonemizers = {}
 
