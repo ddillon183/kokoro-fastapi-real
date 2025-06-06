@@ -7,9 +7,9 @@ from typing import Any, Dict, List, Callable, Optional
 import pandas as pd
 import scipy.io.wavfile as wavfile
 
-from .shared_utils import save_json_results
-from .shared_plotting import plot_timeline, plot_correlation
-from .shared_benchmark_utils import enc, get_text_for_tokens
+from examples.assorted_checks.benchmarks.lib.shared_utils import save_json_results
+from examples.assorted_checks.benchmarks.lib.shared_plotting import plot_timeline, plot_correlation
+from examples.assorted_checks.benchmarks.lib.shared_benchmark_utils import enc, get_text_for_tokens
 
 
 def check_audio_silence(audio_path: str) -> bool:
