@@ -8,12 +8,11 @@ import torch
 from kokoro import KModel, KPipeline
 from loguru import logger
 
-from ..core import paths
-from ..core.config import settings
-from ..core.model_config import model_config
-from ..structures.schemas import WordTimestamp
-from .base import AudioChunk, BaseModelBackend
-
+from api.src.core import paths
+from api.src.core.config import settings
+from api.src.core.model_config import model_config
+from api.src.structures.schemas import WordTimestamp
+from api.src.inference.base import AudioChunk, BaseModelBackend
 
 class KokoroV1(BaseModelBackend):
     """Kokoro backend with controlled resource management."""
