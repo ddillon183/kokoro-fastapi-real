@@ -12,16 +12,16 @@ import torch
 from kokoro import KPipeline
 from loguru import logger
 
-from ..core.config import settings
-from ..inference.base import AudioChunk
-from ..inference.kokoro_v1 import KokoroV1
-from ..inference.model_manager import get_manager as get_model_manager
-from ..inference.voice_manager import get_manager as get_voice_manager
-from ..structures.schemas import NormalizationOptions
-from .audio import AudioNormalizer, AudioService
-from .streaming_audio_writer import StreamingAudioWriter
-from .text_processing import tokenize
-from .text_processing.text_processor import process_text_chunk, smart_split
+from api.src.core.config import settings
+from api.src.inference.base import AudioChunk
+from api.src.inference.kokoro_v1 import KokoroV1
+from api.src.inference.model_manager import get_manager as get_model_manager
+from api.src.inference.voice_manager import get_manager as get_voice_manager
+from api.src.structures.schemas import NormalizationOptions
+from api.src.services.audio import AudioNormalizer, AudioService
+from api.src.services.streaming_audio_writer import StreamingAudioWriter
+from api.src.services.text_processing import tokenize
+from api.src.services.text_processing.text_processor import process_text_chunk, smart_split
 
 
 class TTSService:
