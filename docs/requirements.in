@@ -1,4 +1,3 @@
-# Primarily for reference, as Dockerfile refer
 # Core dependencies
 fastapi==0.115.6
 uvicorn==0.34.0
@@ -8,9 +7,15 @@ openai>=1.0.0
 python-dotenv==1.0.1
 sqlalchemy==2.0.27
 
+# TTS-specific libraries (pinned to avoid EspeakWrapper.set_data_path error)
+kokoro==0.9.4
+misaki==0.3.0
+espeakng-loader==0.1.2
+
 # ML/DL
 transformers==4.47.1
-numpy>=1.26.0  # Version managed by PyTorch dependencies
+torch==2.2.2+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+numpy==2.2.1
 scipy==1.14.1
 onnxruntime==1.20.1
 
@@ -19,14 +24,20 @@ soundfile==0.13.0
 
 # Text processing
 regex==2024.11.6
+tiktoken==0.8.0
 
 # Utilities
-aiofiles==23.2.1  # Last version before Windows path handling changes
+aiofiles==23.2.1
 tqdm==4.67.1
 requests==2.32.3
 munch==4.0.0
-tiktoken===0.8.0
 loguru==0.7.3
+
+# Testing
+pytest==8.0.0
+httpx==0.26.0
+pytest-asyncio==0.23.5
+
 
 # Testing
 pytest==8.0.0
