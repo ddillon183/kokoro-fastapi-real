@@ -4,16 +4,16 @@ import time
 
 import pandas as pd
 
-from examples.assorted_checks.lib.shared_utils import (
+from examples.assorted_checks.benchmarks.lib.shared_utils import (
     save_json_results,
     get_system_metrics,
     write_benchmark_stats,
 )
-from examples.assorted_checks.lib.shared_plotting import (
+from examples.assorted_checks.benchmarks.lib.shared_plotting import (
     plot_correlation,
     plot_system_metrics,
 )
-from examples.assorted_checks.lib.shared_benchmark_utils import (
+from examples.assorted_checks.benchmarks.lib.shared_benchmark_utils import (
     enc,
     make_tts_request,
     get_text_for_tokens,
