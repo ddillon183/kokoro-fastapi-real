@@ -14,7 +14,7 @@ from numpy import number
 # from text_to_num import text2num
 from torch import mul
 
-from ...structures.schemas import NormalizationOptions
+from api.src.structures.schemas import NormalizationOptions
 
 # Constants
 VALID_TLDS = [
