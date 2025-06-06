@@ -13,9 +13,9 @@ from loguru import logger
 from pydub import AudioSegment
 from torch import norm
 
-from ..core.config import settings
-from ..inference.base import AudioChunk
-from .streaming_audio_writer import StreamingAudioWriter
+from api.src.core.config import settings
+from api.src.inference.base import AudioChunk
+from api.src.services.streaming_audio_writer import StreamingAudioWriter
 
 
 class AudioNormalizer:
