@@ -27,9 +27,8 @@ RUN useradd -m -u 1000 appuser && \
 USER appuser
 WORKDIR /app
 
-# Copy requirement files and install dependencies
-COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
-COPY --chown=appuser:appuser docs ./docs
+# Copy requirement files and install dependencies (use compiled file)
+COPY --chown=appuser:appuser docs/requirements.txt ./requirements.txt
 RUN python -m venv .venv && \
     . .venv/bin/activate && \
     pip install --upgrade pip && \
@@ -53,9 +52,4 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Run entrypoint script
 ENV DEVICE="cpu"
-RUN bash ./docker/scripts/update_requirements.sh
 CMD ["./docker/scripts/entrypoint.sh"]
-
-
-
-
