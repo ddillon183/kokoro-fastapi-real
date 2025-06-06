@@ -52,6 +52,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Run entrypoint script
 ENV DEVICE="cpu"
+RUN bash ./docker/scripts/update_requirements.sh
 CMD ["./docker/scripts/entrypoint.sh"]
 
 
