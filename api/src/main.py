@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
-from core.config import settings
+from api.src.core.config import settings
 from .routers.debug import router as debug_router
 from .routers.development import router as dev_router
 from .routers.openai_compatible import router as openai_router
