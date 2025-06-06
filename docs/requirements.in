@@ -14,7 +14,7 @@ espeakng-loader==0.1.2
 
 # ML/DL
 transformers==4.47.1
-torch==2.2.2+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2+cpu
 numpy==2.2.1
 scipy==1.14.1
 onnxruntime==1.20.1
