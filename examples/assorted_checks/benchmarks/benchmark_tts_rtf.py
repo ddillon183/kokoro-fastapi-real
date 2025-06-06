@@ -8,14 +8,14 @@ import threading
 from datetime import datetime
 
 import pandas as pd
-from lib.shared_utils import (
+from examples.assorted_checks.benchmarks.lib.shared_utils import (
     real_time_factor,
     save_json_results,
     get_system_metrics,
     write_benchmark_stats,
 )
-from lib.shared_plotting import plot_correlation, plot_system_metrics
-from lib.shared_benchmark_utils import (
+from examples.assorted_checks.benchmarks.lib.shared_plotting import plot_correlation, plot_system_metrics
+from examples.assorted_checks.benchmarks.lib.shared_benchmark_utils import (
     enc,
     make_tts_request,
     get_text_for_tokens,
