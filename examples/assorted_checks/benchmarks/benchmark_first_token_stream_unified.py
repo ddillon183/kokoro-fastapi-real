@@ -4,7 +4,7 @@ import time
 
 import requests
 from openai import OpenAI
-from lib.stream_utils import run_benchmark
+from examples.assorted_checks.benchmarks.lib.stream_utils import run_benchmark
 
 OPENAI_CLIENT = OpenAI(
     base_url="http://localhost:8880/v1", api_key="not-needed-for-local"
