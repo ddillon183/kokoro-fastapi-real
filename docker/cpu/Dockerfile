@@ -29,6 +29,7 @@ WORKDIR /app
 
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
+COPY --chown=appuser:appuser docs ./docs
 RUN python -m venv .venv && \
     . .venv/bin/activate && \
     pip install --upgrade pip && \
