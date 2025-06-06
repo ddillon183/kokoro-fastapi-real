@@ -25,7 +25,7 @@ RUN useradd -m -u 1000 appuser && \
     chown -R appuser:appuser /app
 
 USER appuser
-WORKDIR /app/api/src
+WORKDIR /app
 
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser docker/cpu/requirements.txt ./requirements.txt
@@ -37,12 +37,12 @@ RUN python -m venv .venv && \
 # Copy entire project
 COPY --chown=appuser:appuser api ./api
 COPY --chown=appuser:appuser web ./web
-COPY --chown=appuser:appuser docker/scripts/ ./
-RUN chmod +x ./entrypoint.sh
+COPY --chown=appuser:appuser docker/scripts/ ./docker/scripts
+RUN chmod +x ./docker/scripts/entrypoint.sh
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/api/src \
+    PYTHONPATH=/app \
     PATH="/app/.venv/bin:$PATH" \
     UV_LINK_MODE=copy \
     USE_GPU=false \
@@ -50,9 +50,10 @@ ENV PYTHONUNBUFFERED=1 \
     PHONEMIZER_ESPEAK_DATA=/usr/share/espeak-ng-data \
     ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
 
-# Expose port and run the app
+# Run entrypoint script
 ENV DEVICE="cpu"
-CMD ["./entrypoint.sh"]
+CMD ["./docker/scripts/entrypoint.sh"]
+
 
 
 
