@@ -8,7 +8,7 @@ import aiofiles
 from fastapi import HTTPException
 from loguru import logger
 
-from ..core.config import settings
+from api.src.core.config import settings
 
 
 async def cleanup_temp_files() -> None:
