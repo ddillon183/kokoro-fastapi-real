@@ -6,9 +6,8 @@ import aiofiles
 import torch
 from loguru import logger
 
-from ..core import paths
-from ..core.config import settings
-
+from api.src.core import paths
+from api.src.core.config import settings
 
 class VoiceManager:
     """Manages voice loading and caching with controlled resource usage."""
