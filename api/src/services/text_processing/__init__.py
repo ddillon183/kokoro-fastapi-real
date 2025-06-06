@@ -1,9 +1,9 @@
 """Text processing pipeline."""
 
-from .normalizer import normalize_text
-from .phonemizer import phonemize
-from .text_processor import process_text_chunk, smart_split
-from .vocabulary import tokenize
+from api.src.services.text_processing.normalizer import normalize_text
+from api.src.services.text_processing.phonemizer import phonemize
+from api.src.services.text_processing.text_processor import process_text_chunk, smart_split
+from api.src.services.text_processing.vocabulary import tokenize
 
 
 def process_text(text: str) -> list[int]:
