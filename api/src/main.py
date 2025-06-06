@@ -14,10 +14,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
 from api.src.core.config import settings
-from .routers.debug import router as debug_router
-from .routers.development import router as dev_router
-from .routers.openai_compatible import router as openai_router
-from .routers.web_player import router as web_router
+from api.src.routers.debug import router as debug_router
+from api.src.routers.development import router as dev_router
+from api.src.routers.openai_compatible import router as openai_router
+from api.src.routers.web_player import router as web_router
 
 
 def setup_logger():
@@ -47,9 +47,9 @@ setup_logger()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan context manager for model initialization"""
-    from .inference.model_manager import get_manager
-    from .inference.voice_manager import get_manager as get_voice_manager
-    from .services.temp_manager import cleanup_temp_files
+    from api.src.inference.model_manager import get_manager
+    from api.src.inference.voice_manager import get_manager as get_voice_manager
+    from api.src.services.temp_manager import cleanup_temp_files
 
     # Clean old temp files on startup
     await cleanup_temp_files()
