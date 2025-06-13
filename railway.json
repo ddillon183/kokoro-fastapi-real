@@ -1,9 +1,0 @@
-{
-  "build": {
-    "builder": "Dockerfile",
-    "watchPaths": ["api", "docker", "download_voices.py"],
-    "buildCommand": "",
-    "startCommand": "python docker/scripts/download_model.py --output api/src/models/v1_0 && python api/src/download_voices.py && uvicorn api.src.main:app --host 0.0.0.0 --port 8000"
-  }
-}
-
