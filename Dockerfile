@@ -43,6 +43,7 @@ RUN pip install --upgrade pip && \
 COPY --chown=appuser:appuser api ./api
 COPY --chown=appuser:appuser web ./web
 COPY --chown=appuser:appuser docker/scripts/ ./docker/scripts
+COPY --chown=appuser:appuser download_voices.py ./download_voices.py
 RUN chmod +x ./docker/scripts/entrypoint.sh
 
 # Set environment variables
