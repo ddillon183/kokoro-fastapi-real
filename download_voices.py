@@ -1,47 +1,90 @@
 import os
-import urllib.request
+import requests
 
-print("🚨 THIS IS THE RAILWAY DOWNLOAD SCRIPT")
+VOICE_DIR = 'voices/v1_0'
+os.makedirs(VOICE_DIR, exist_ok=True)
 
-voice_dir = 'api/src/voices/v1_0'
-os.makedirs(voice_dir, exist_ok=True)
+voices = [
+    ('https://drive.google.com/uc?export=download&id=1S5Kn35IpJg0FF6LaF7zqgTbHd6CAkJJL', 'af_alloy.pt'),
+    ('https://drive.google.com/uc?export=download&id=10tF0EV72LkSBTD3u4RSRLONhBvdUerou', 'af_aoede.pt'),
+    ('https://drive.google.com/uc?export=download&id=17bvJQUtUGkWHXyBaisYH05H_dOQ2aHG5', 'af_bella.pt'),
+    ('https://drive.google.com/uc?export=download&id=1_lfJDwD0fVORPOmDhNUOPZl1lsL-hZZf', 'af_heart.pt'),
+    ('https://drive.google.com/uc?export=download&id=1JYsotLR5TC4HesWHdJIZlp1OF7ZS-a4R', 'af_jadzia.pt'),
+    ('https://drive.google.com/uc?export=download&id=1hD4PHfRUmVjje2CL0fKR6wyTnOcNiIMa', 'af_jessica.pt'),
+    ('https://drive.google.com/uc?export=download&id=1nLcjV8jTHmuXrTSfjCZ00g_XSnhJyvOp', 'af_kore.pt'),
+    ('https://drive.google.com/uc?export=download&id=1rIKyUXrXe53WJpAk2e3v7nkjddL40k36', 'af_nicole.pt'),
+    ('https://drive.google.com/uc?export=download&id=16gg3Yhmj1LvUI1Rim9-9cjGIdVkNNvg1', 'af_nova.pt'),
+    ('https://drive.google.com/uc?export=download&id=1ooUCnKAXMRVZ9t0oJRpw82jmqzTcSRQZ', 'af_river.pt'),
+    ('https://drive.google.com/uc?export=download&id=1_qQK41S-VCBMn9CmauPGaw38M6KH92fI', 'af_sarah.pt'),
+    ('https://drive.google.com/uc?export=download&id=17p9oxvoNMucANd_FHqgXRPtCMu87cSPS', 'af_sky.pt'),
+    ('https://drive.google.com/uc?export=download&id=1OaX8SrD1RI-fsZIa9jHTT8uL4x6IQjTi', 'af_vO.pt'),
+    ('https://drive.google.com/uc?export=download&id=1uswnlYm7mBvTiacESv9cWP_DxDMk0bhm', 'af_vObella.pt'),
+    ('https://drive.google.com/uc?export=download&id=1nNSXTUDoygBEK4QJ0RTjW0BhzoqpWDoT', 'af_vOirulan.pt'),
+    ('https://drive.google.com/uc?export=download&id=1uH3F1rn3M15Nw8k86HejWJ28dic8qFZj', 'af_vOnicole.pt'),
+    ('https://drive.google.com/uc?export=download&id=17kSNd-vINA9rJ0GamAHLbqj7ysvyhYgx', 'af_vOsarah.pt'),
+    ('https://drive.google.com/uc?export=download&id=1sLoLdBxYin8cu2htJc2hh_4reC4fJJ8d', 'af_vOsky.pt'),
+    ('https://drive.google.com/uc?export=download&id=1pA2GZXjIDBTcHN4zi9AMJEzPpmq9zcSE', 'am_adam.pt'),
+    ('https://drive.google.com/uc?export=download&id=1yU-mKSrjYQZpq6ng094eMa0qld-7mY6h', 'am_echo.pt'),
+    ('https://drive.google.com/uc?export=download&id=1x2jsm2cNlkV1EN9XwSuTi5IUKtpw3B0E', 'am_eric.pt'),
+    ('https://drive.google.com/uc?export=download&id=1fd5owiKNONSoO2vzoBVzH2KvOXHxZvz-', 'am_fenrir.pt'),
+    ('https://drive.google.com/uc?export=download&id=1OY26fuq6KE531ReysGdOv82YAVpaJKfX', 'am_liam.pt'),
+    ('https://drive.google.com/uc?export=download&id=11DRpBzRmayBVuZpmWAe3RcNxbkAc7HCL', 'am_michael.pt'),
+    ('https://drive.google.com/uc?export=download&id=1f99B6pDqv0sW0hmGnNQklv_1Zhd1R6PB', 'am_onyx.pt'),
+    ('https://drive.google.com/uc?export=download&id=1tvpG8jfgBUXR56ks2nHKa-8O6zyj9VU_', 'am_puck.pt'),
+    ('https://drive.google.com/uc?export=download&id=1HvgJaABNnIM5KZhqsbrl_xL9ADNgcGdJ', 'am_santa.pt'),
+    ('https://drive.google.com/uc?export=download&id=1O76Kd7plq0sTZPAEvfE8O16L2T9KAuQS', 'am_vOadam.pt'),
+    ('https://drive.google.com/uc?export=download&id=1nCb-gi29YwiA9Pi2hV-RJmKOaC_k5WeU', 'am_vOgurney.pt'),
+    ('https://drive.google.com/uc?export=download&id=1oOTC4n3BgLfOiwaZeyyWnzvkvq7FNKR8', 'am_vOmichael.pt'),
+    ('https://drive.google.com/uc?export=download&id=1OGn1wxlIpHjnqsu1lD95JdktYUWxedBg', 'bf_alice.pt'),
+    ('https://drive.google.com/uc?export=download&id=1V9bxPnN-vaeqjWDf4X_E7vbiRkc8RTxS', 'bf_emma.pt'),
+    ('https://drive.google.com/uc?export=download&id=141PDxpi7LDhHCDrUghzlg8M_OiifV7ZO', 'bf_lily.pt'),
+    ('https://drive.google.com/uc?export=download&id=1iOFUmmSuwAG0vSihiwl8b1h5ceC5YzRo', 'bf_vOemma.pt'),
+    ('https://drive.google.com/uc?export=download&id=1zTatpR4EsuEYeZavgjCI-0gJKufWvhwf', 'bf_vOisabella.pt'),
+    ('https://drive.google.com/uc?export=download&id=1rgFm5o1Z66uW-R2rU10Q5ed3qzPG9NDJ', 'bm_daniel.pt'),
+    ('https://drive.google.com/uc?export=download&id=1ysu41DFRaQYgEc-Kl0jOZLBJD2x1eSCz', 'bm_fable.pt'),
+    ('https://drive.google.com/uc?export=download&id=1u3lFtGr35TDO0PzG6QvE9sK2O9ootVt4', 'bm_george.pt'),
+    ('https://drive.google.com/uc?export=download&id=1Ujd4jhqoxf-0bIq_V-JIqgCAowhqPxhu', 'bm_lewis.pt'),
+    ('https://drive.google.com/uc?export=download&id=1jjNUOEZpNWWLa2w_Hnbq_FXpajW5JliW', 'bm_vOgeorge.pt'),
+    ('https://drive.google.com/uc?export=download&id=1elqlxz9P18YMW-6aC0_yumEULhmvNqnR', 'bm_vOlewis.pt'),
+    ('https://drive.google.com/uc?export=download&id=1e60tDZsy-KhzadR8ER_-xoq8LFwFPtLL', 'ef_dora.pt'),
+    ('https://drive.google.com/uc?export=download&id=1cygIvQf3fKyt0uBUtKRrp3Law27MBu42', 'em_alex.pt'),
+    ('https://drive.google.com/uc?export=download&id=1TCIjSC3WRZ-G02j58Ko1lM0gevHWfBmL', 'em_santa.pt'),
+    ('https://drive.google.com/uc?export=download&id=13xZ4PLspTGOC566D1CGsbXl84_EPrId5', 'ff_siwis.pt'),
+    ('https://drive.google.com/uc?export=download&id=10K3WzG4CJHFnm9tZ1AF322YXavC0bMw9', 'hf_alpha.pt'),
+    ('https://drive.google.com/uc?export=download&id=1R__A9J45_J1rnptJTFIBIjn15vX2DmqK', 'hf_beta.pt'),
+    ('https://drive.google.com/uc?export=download&id=1DoYDWrl6fp7_l14BnIyKKhDycvyWnF8z', 'hm_omega.pt'),
+    ('https://drive.google.com/uc?export=download&id=1EBzV4xt_fRscfyAZCc7QUFNQSXNCTaNh', 'hm_psi.pt'),
+    ('https://drive.google.com/uc?export=download&id=13yZ-_CcbLzPy_iFg7776joxwBUJiqCwk', 'if_sarah.pt'),
+    ('https://drive.google.com/uc?export=download&id=1Ax1Q-6ud8awmW4bmekvOm9QuoShxpd7-', 'im_nicola.pt'),
+    ('https://drive.google.com/uc?export=download&id=1LVhFeGnf8_NZoyzTveD0kX__r03vqLSh', 'jf_alpha.pt'),
+    ('https://drive.google.com/uc?export=download&id=1xAL8uk72FRohSyzi7YoPUGuuEgQhzUPX', 'jf_gongitsune.pt'),
+    ('https://drive.google.com/uc?export=download&id=1_5mHtxVxlMr9F1rJlkU_MvQ7K4wyjrgq', 'jf_nezumi.pt'),
+    ('https://drive.google.com/uc?export=download&id=1KylgFKnR3zy5ucOnCuBEKae6YGYKHUAC', 'jf_tebukuro.pt'),
+    ('https://drive.google.com/uc?export=download&id=1ad7iWVK0qoNt-UPlBX_n1JJaBcDe1mm6', 'jm_kumo.pt'),
+    ('https://drive.google.com/uc?export=download&id=1mAnSwEjbTYg3Nmds_f_0xSUbndAeWpgW', 'pf_dora.pt'),
+    ('https://drive.google.com/uc?export=download&id=1xKZ6MKdzceT-HK4NZ05HYfRf0SvMCkYK', 'pm_alex.pt'),
+    ('https://drive.google.com/uc?export=download&id=1zHUgMw7Ege7qIDF89KA7AIGf3uWX2WXr', 'pm_santa.pt'),
+    ('https://drive.google.com/uc?export=download&id=1Vyz-vdzIsP6LhX-BbvVIDpg3FtxoPSVR', 'zf_xiaobei.pt'),
+    ('https://drive.google.com/uc?export=download&id=1jP_rY1y6mCD2GRZaE60PQDNPlMFnXKE9', 'zf_xiaoni.pt'),
+    ('https://drive.google.com/uc?export=download&id=1HHXiin4T0i7YrBXGYSySjNtg40IyAUix', 'zf_xiaoxiao.pt'),
+    ('https://drive.google.com/uc?export=download&id=12gQedeAoDJJpet_03Ccw3KM2jURdYhbd', 'zf_xiaoyi.pt'),
+    ('https://drive.google.com/uc?export=download&id=1QbyZt1pKlyy3m_dbuS7Q6xsr0d4b19XA', 'zm_yunjian.pt'),
+    ('https://drive.google.com/uc?export=download&id=13voDtNrsthK8iTpoDxkorj7D05dwovEy', 'zm_yunxi.pt'),
+    ('https://drive.google.com/uc?export=download&id=1JmF1bo_a6rkBzUd2uEr7KiWmw5Tkpkrv', 'zm_yunxia.pt'),
+    ('https://drive.google.com/uc?export=download&id=123UaiRavJvA-vdhHUOFuaTUg4wH70erd', 'zm_yunyang.pt'),
+]
 
-voice_links = {
-    'af_alloy.pt': 'https://drive.google.com/uc?export=download&id=1S5Kn35IpJg0FF6LaF7zqgTbHd6CAkJJL',
-    'af_aoede.pt': 'https://drive.google.com/uc?export=download&id=1GJHjPr8zicOWqBa9toK0r8bRhquNcFCJ',
-    'af_bella.pt': 'https://drive.google.com/uc?export=download&id=1HR8xPfyty7B45xlo4bMFgr2xPYjllLq6',
-    'af_heart.pt': 'https://drive.google.com/uc?export=download&id=1Qku2SH4KXeqYmTUEtcuKRbDDhmn9acFv',
-    'af_jadzia.pt': 'https://drive.google.com/uc?export=download&id=1g0ODz6ld9GSft7j35E3O_A14GpbrRrse',
-    'af_jessica.pt': 'https://drive.google.com/uc?export=download&id=1VZwYG0QpMZfJ3LBNABeIXPR_VRmeKXb1',
-    'af_kore.pt': 'https://drive.google.com/uc?export=download&id=1NBJQyQK-Q8DXNSVrKpRP1euW6rxS_0J_',
-    'af_nicole.pt': 'https://drive.google.com/uc?export=download&id=1sVqDLyJ1QUj7pZwFBcZVXykzxtgkcc_Y',
-    'af_nova.pt': 'https://drive.google.com/uc?export=download&id=1XsZ1CvwT_YfR0ApbKopNEwJdFR41tnq3',
-    'af_river.pt': 'https://drive.google.com/uc?export=download&id=1sH3yXU4t-jLhKIoJYiA5RZZc3cR39ss4',
-    'af_sarah.pt': 'https://drive.google.com/uc?export=download&id=1hrFYeS-HjOtzgxXk2P_bZTghgsws9B3F',
-    'af_sky.pt': 'https://drive.google.com/uc?export=download&id=1GmQO60OVvUWr0JPp4dRqxJhHTRP5CmZ0',
-    'af_v0.pt': 'https://drive.google.com/uc?export=download&id=1bDwH9dLaHqKLx2e3BPRqj9HuP7rwiOgK',
-    'af_v0bella.pt': 'https://drive.google.com/uc?export=download&id=1-DyiRxRRlm0g5jvq8KK-FenQ7lfGpfrZ',
-    'af_v0nicole.pt': 'https://drive.google.com/uc?export=download&id=1LT1uEVeEdrTbK54sAPMw4Nph5SOjq5vJ',
-    'af_v0sarah.pt': 'https://drive.google.com/uc?export=download&id=1OBBEa8bUPcG5jbhX7lguDXZ0muv3Vwlt',
-    'af_v0sky.pt': 'https://drive.google.com/uc?export=download&id=1yArMOTNgMH2nqllOsvZyoUz2VB9LCIHX',
-    'af_vo.pt': 'https://drive.google.com/uc?export=download&id=1m3FpcAz2iM-Lw6IQx6Si3rFuUIdjT2qZ',
-    'af_vobella.pt': 'https://drive.google.com/uc?export=download&id=1vHt3WbRx_ePGaZlA4kNhTHpeZ1vM_hmE',
-    'af_voirulan.pt': 'https://drive.google.com/uc?export=download&id=1na9FRkU9XPaQzkgPVq8f5O_wKtrjzzYw',
-    'am_adam.pt': 'https://drive.google.com/uc?export=download&id=1H6Yt-w3t8kHaP1XpEV_aQ2a2n8llsE3g',
-    'am_echo.pt': 'https://drive.google.com/uc?export=download&id=1mcFFKjvZZgqlJrfNusL3Sp5MzR3syFAp',
-    'am_eric.pt': 'https://drive.google.com/uc?export=download&id=1Z_kebhF0QjZ9OXMnNqsv6qEdFVnbPEFb',
-    'am_fennrir.pt': 'https://drive.google.com/uc?export=download&id=1AB9uMEepDydSxWddhd5q_kD5tAcR6pZk',
-    'am_liam.pt': 'https://drive.google.com/uc?export=download&id=1dV0_djQEuM47kS7iPbspMfNzzRzqj-RH',
-    'am_michael.pt': 'https://drive.google.com/uc?export=download&id=1c_5ZCU7LfG20KHNZ5HaGvEp0ISUVd3IQ',
-}
-
-print("🔊 Starting Kokoro voice file download...")
-
-for filename, url in voice_links.items():
-    safe_filename = filename.replace('.pt.pt', '.pt')  # In case the URL already ends with .pt
-    out_path = os.path.join(voice_dir, safe_filename)
-    print(f"⬇ Downloading: {safe_filename}")
-    urllib.request.urlretrieve(url, out_path)
-    print(f"✔ Downloaded: {safe_filename}")
-
-print('✅ All voice files downloaded.')
+for url, filename in voices:
+    path = os.path.join(VOICE_DIR, filename)
+    if os.path.exists(path):
+        print(f'✅ {filename} already exists, skipping.')
+        continue
+    try:
+        print(f'⬇️ Downloading {filename}...')
+        r = requests.get(url)
+        r.raise_for_status()
+        with open(path, 'wb') as f:
+            f.write(r.content)
+        print(f'✅ Downloaded {filename}')
+    except Exception as e:
+        print(f'❌ Failed to download {filename}: {e}')
