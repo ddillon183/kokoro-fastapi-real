@@ -35,7 +35,7 @@ USER appuser
 WORKDIR /app
 
 # Copy requirement files and install dependencies (use compiled file)
-COPY --chown=appuser:appuser docs/requirements.txt ./requirements.txt
+COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 RUN python -m venv .venv && \
     . .venv/bin/activate && \
     pip install --upgrade pip && \
