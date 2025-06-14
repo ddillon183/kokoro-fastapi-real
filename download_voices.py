@@ -74,17 +74,36 @@ voices = [
     ('https://drive.google.com/uc?export=download&id=123UaiRavJvA-vdhHUOFuaTUg4wH70erd', 'zm_yunyang.pt'),
 ]
 
-for url, filename in voices:
-    path = os.path.join(VOICE_DIR, filename)
-    if os.path.exists(path):
-        print(f'✅ {filename} already exists, skipping.')
+# Destination path where voice files are saved
+DEST_FOLDER = "api/src/voices/v1_0"
+os.makedirs(DEST_FOLDER, exist_ok=True)
+
+downloaded = 0
+skipped = 0
+
+for voice_name, url in voices.items():
+    filename = f"{voice_name}.pt"
+    filepath = os.path.join(DEST_FOLDER, filename)
+
+    if os.path.exists(filepath):
+        print(f"{filename} already exists, skipping.")
+        skipped += 1
         continue
+
     try:
-        print(f'⬇️ Downloading {filename}...')
-        r = requests.get(url)
-        r.raise_for_status()
-        with open(path, 'wb') as f:
-            f.write(r.content)
-        print(f'✅ Downloaded {filename}')
+        print(f"Downloading {filename}...")
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+        with open(filepath, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Downloaded {filename}")
+        downloaded += 1
     except Exception as e:
-        print(f'❌ Failed to download {filename}: {e}')
+        print(f"Failed to download {filename}: {e}")
+
+print(f"\n✅ Download complete. {downloaded} downloaded, {skipped} skipped.")
+
+# Optional graceful exit if nothing was done
+if downloaded == 0:
+    print("All voice files already exist. No download needed.")
