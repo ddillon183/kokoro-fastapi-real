@@ -1,9 +1,11 @@
 import os
 import requests
 
-VOICE_DIR = 'voices/v1_0'
-os.makedirs(VOICE_DIR, exist_ok=True)
+# Where downloaded voices will be saved (Railway-compatible path)
+DEST_FOLDER = "api/src/voices/v1_0"
+os.makedirs(DEST_FOLDER, exist_ok=True)
 
+# List of tuples: (Google Drive URL, voice filename)
 voices = [
     ('https://drive.google.com/uc?export=download&id=1S5Kn35IpJg0FF6LaF7zqgTbHd6CAkJJL', 'af_alloy.pt'),
     ('https://drive.google.com/uc?export=download&id=10tF0EV72LkSBTD3u4RSRLONhBvdUerou', 'af_aoede.pt'),
@@ -74,17 +76,13 @@ voices = [
     ('https://drive.google.com/uc?export=download&id=123UaiRavJvA-vdhHUOFuaTUg4wH70erd', 'zm_yunyang.pt'),
 ]
 
-# Destination path where voice files are saved
-DEST_FOLDER = "api/src/voices/v1_0"
-os.makedirs(DEST_FOLDER, exist_ok=True)
-
 downloaded = 0
 skipped = 0
 
-for voice_name, url in voices.items():
-    filename = f"{voice_name}.pt"
+# Iterate through the list of (url, filename) pairs
+for url, filename in voices:
     filepath = os.path.join(DEST_FOLDER, filename)
-
+    
     if os.path.exists(filepath):
         print(f"{filename} already exists, skipping.")
         skipped += 1
@@ -100,10 +98,8 @@ for voice_name, url in voices.items():
         print(f"Downloaded {filename}")
         downloaded += 1
     except Exception as e:
-        print(f"Failed to download {filename}: {e}")
+        print(f"❌ Failed to download {filename}: {e}")
 
 print(f"\n✅ Download complete. {downloaded} downloaded, {skipped} skipped.")
-
-# Optional graceful exit if nothing was done
 if downloaded == 0:
-    print("All voice files already exist. No download needed.")
+    print("All voice files already exist. No new files were downloaded.")
