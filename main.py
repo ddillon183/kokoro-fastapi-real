@@ -18,8 +18,6 @@ from api.src.routers.debug import router as debug_router
 from api.src.routers.openai_compatible import router as openai_router
 from api.src.routers.web_player import router as web_router
 
-app = FastAPI()
-
 # Allow all CORS (can be locked down for production)
 app.add_middleware(
     CORSMiddleware,
@@ -174,4 +172,5 @@ async def test_endpoint():
 
 
 if __name__ == "__main__":
-    uvicorn.run("api.src.main:app", host=settings.host, port=settings.port, reload=True)
+    uvicorn.run("main:app", host=settings.host, port=settings.port, reload=True)
+
