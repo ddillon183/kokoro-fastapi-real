@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libavfilter-dev \
     python3-dev \
     pkg-config \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
 
 # Link espeak-ng data directory
 RUN mkdir -p /usr/share/espeak-ng-data && \
@@ -34,9 +34,13 @@ RUN useradd -m -u 1000 appuser && \
 USER appuser
 WORKDIR /app
 
-# Copy requirement files and install dependencies (use compiled file)
+# Copy requirement files and install dependencies
 COPY --chown=appuser:appuser requirements.txt ./requirements.txt
-RUN pip install --upgrade pip && \
+
+# Create and activate virtual environment, install dependencies
+RUN python -m venv .venv && \
+    . .venv/bin/activate && \
+    pip install --upgrade pip && \
     pip install -r requirements.txt
 
 # Copy entire project
@@ -47,7 +51,6 @@ COPY --chown=appuser:appuser download_voices.py ./download_voices.py
 RUN chmod +x ./docker/scripts/entrypoint.sh
 
 # Set environment variables
-# Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/api:/app \
     PATH="/app/.venv/bin:$PATH" \
@@ -57,7 +60,8 @@ ENV PYTHONUNBUFFERED=1 \
     PHONEMIZER_ESPEAK_DATA=/usr/share/espeak-ng-data \
     ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
 
-# Run entrypoint script
-ENV DEVICE="cpu"
+# Clean up .pyc etc
 RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf || true
-CMD ["./docker/scripts/entrypoint.sh"]
+
+# Run your entrypoint (uvicorn should now be in the path via .venv)
+CMD ["bash", "-c", ". .venv/bin/activate && ./docker/scripts/entrypoint.sh"]
