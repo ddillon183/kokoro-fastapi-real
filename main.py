@@ -18,6 +18,9 @@ from api.src.routers.debug import router as debug_router
 from api.src.routers.openai_compatible import router as openai_router
 from api.src.routers.web_player import router as web_router
 
+# Instantiate FastAPI app (⬅️ this line is essential)
+app = FastAPI()
+
 # Allow all CORS (can be locked down for production)
 app.add_middleware(
     CORSMiddleware,
@@ -26,22 +29,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Attach routers
 app.include_router(openai_router)
 app.include_router(web_router)
 app.include_router(debug_router)
 
+# Handle downloads on startup
 @app.on_event("startup")
 async def startup_event():
-    # Trigger model download if env var is true
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("Starting Kokoro model download from startup_event...")
-        os.system("python docker/scripts/download_model.py --output api/src/models/v1_0")
+        os.system("python -m api.src.core.download_model")
 
-    # Trigger voices download if env var is true
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("Starting Kokoro voices download from startup_event...")
-        os.system("python api/src/download_voices.py")
-
+        os.system("python download_voices.py")
 
 
 def setup_logger():
