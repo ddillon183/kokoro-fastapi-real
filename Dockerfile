@@ -64,4 +64,5 @@ ENV PYTHONUNBUFFERED=1 \
 RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf || true
 
 # Run your entrypoint (uvicorn should now be in the path via .venv)
-CMD ["bash", "-c", ". .venv/bin/activate && ./docker/scripts/entrypoint.sh"]
+CMD ["bash", "-c", ". .venv/bin/activate && ./docker/scripts/entrypoint.sh && uvicorn main:app --host 0.0.0.0 --port 8888"]
+
