@@ -37,11 +37,13 @@ WORKDIR /app
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 
-# Create and activate virtual environment, install dependencies
-RUN python -m venv .venv && \
-    . .venv/bin/activate && \
-    pip install --upgrade pip && \
-    pip install -r requirements.txt
+# Create virtual environment and install dependencies
+RUN python -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install -r requirements.txt
+
+# Make sure the virtual environment is used in subsequent commands
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy entire project
 COPY --chown=appuser:appuser api ./api
