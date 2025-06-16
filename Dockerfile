@@ -39,7 +39,7 @@ COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 
 # ✅ Use system Python to install dependencies
 RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+    pip install --use-feature=fast-deps --break-system-packages -r requirements.txt
 
 # Copy entire project
 COPY --chown=appuser:appuser api ./api
