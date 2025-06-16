@@ -176,7 +176,7 @@ networkx==3.4.2
     # via torch
 num2words==0.5.14
     # via misaki
-numpy==1.26.4  # Last stable 1.x version as of 2024
+numpy<2
     # via
     #   -r docs/requirements.in
     #   blis

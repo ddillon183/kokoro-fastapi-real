@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 
 from api.src.core.config import settings
 from api.src.inference.base import AudioChunk
-from api.src.main import app
+from main import app
 from api.src.routers.openai_compatible import (
     get_tts_service,
     load_openai_mappings,
