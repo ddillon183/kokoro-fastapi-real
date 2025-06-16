@@ -31,7 +31,7 @@ app.include_router(debug_router)
 async def startup_event():
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("Downloading model files...")
-        subprocess.call(["python", "api/src/core/download_model.py", "--output", "api/src/models/v1_0"])
+        subprocess.call(["python", "docker/scripts/download_model.py", "--output", "api/src/models/v1_0"])
 
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("Downloading voice files...")
