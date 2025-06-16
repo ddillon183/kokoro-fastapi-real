@@ -52,13 +52,13 @@ RUN chmod +x ./docker/scripts/entrypoint.sh
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/api:/app \
-    PATH="/app/.venv/bin:$PATH" \
     UV_LINK_MODE=copy \
     USE_GPU=false \
     PHONEMIZER_ESPEAK_PATH=/usr/bin \
     PHONEMIZER_ESPEAK_DATA=/usr/share/espeak-ng-data \
-    ESPEAK_DATA_PATH=/usr/share/espeak-ng-data
+    ESPEAK_DATA_PATH=/usr/share/espeak-ng-data \
+    PYTHONPATH=/app/api:/app \
+    PATH="/app/.venv/bin:$PATH"
 
 # Clean up .pyc etc
 RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf || true

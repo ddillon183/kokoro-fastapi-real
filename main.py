@@ -2,26 +2,20 @@
 FastAPI OpenAI Compatible API
 """
 
-import os
-import sys
-from contextlib import asynccontextmanager
-from pathlib import Path
-
-import torch
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
+import os
+import subprocess
 
-from core.config import settings
-from routers.debug import router as debug_router
-from routers.openai_compatible import router as openai_router
-from routers.web_player import router as web_router
+from api.src.core.config import settings
+from api.src.routers.debug import router as debug_router
+from api.src.routers.openai_compatible import router as openai_router
+from api.src.routers.web_player import router as web_router
 
-# Instantiate FastAPI app (⬅️ this line is essential)
-app = FastAPI(title="Kokoro API")
+app = FastAPI()
 
-# Allow all CORS (can be locked down for production)
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,21 +23,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Attach routers
 app.include_router(openai_router)
 app.include_router(web_router)
 app.include_router(debug_router)
 
-# Handle downloads on startup
 @app.on_event("startup")
 async def startup_event():
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
-        logger.info("Starting Kokoro model download from startup_event...")
-        os.system("python -m core.download_model")
+        logger.info("Downloading model files...")
+        subprocess.call(["python", "api/src/core/download_model.py", "--output", "api/src/models/v1_0"])
 
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
-        logger.info("Starting Kokoro voices download from startup_event...")
-        os.system("python download_voices.py")
+        logger.info("Downloading voice files...")
+        subprocess.call(["python", "download_voices.py"])
 
 
 def setup_logger():
