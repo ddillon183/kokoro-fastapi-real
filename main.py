@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 import os
+import sys
 import subprocess
 
 from api.src.core.config import settings
