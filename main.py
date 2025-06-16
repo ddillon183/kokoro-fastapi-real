@@ -5,6 +5,7 @@ FastAPI OpenAI Compatible API
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
+from contextlib import asynccontextmanager
 import os
 import sys
 import subprocess
