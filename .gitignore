@@ -87,6 +87,9 @@ uv.lock
 # Mac MPS virtualenv for dual testing
 .venv-mps
 
+# Ignore actual downloaded voices folder in root
+voices/v1_0/
+
 # Prevent local or downloaded voice files from being tracked
 api/src/voices/v1_0/
 *.pt.pt
