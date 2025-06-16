@@ -176,7 +176,7 @@ networkx==3.4.2
     # via torch
 num2words==0.5.14
     # via misaki
-numpy<2
+numpy==1.26.4
     # via
     #   -r docs/requirements.in
     #   blis
