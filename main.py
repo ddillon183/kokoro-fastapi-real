@@ -13,13 +13,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
 
-from api.src.core.config import settings
-from api.src.routers.debug import router as debug_router
-from api.src.routers.openai_compatible import router as openai_router
-from api.src.routers.web_player import router as web_router
+from core.config import settings
+from routers.debug import router as debug_router
+from routers.openai_compatible import router as openai_router
+from routers.web_player import router as web_router
 
 # Instantiate FastAPI app (⬅️ this line is essential)
-app = FastAPI()
+app = FastAPI(title="Kokoro API")
 
 # Allow all CORS (can be locked down for production)
 app.add_middleware(
@@ -39,7 +39,7 @@ app.include_router(debug_router)
 async def startup_event():
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("Starting Kokoro model download from startup_event...")
-        os.system("python -m api.src.core.download_model")
+        os.system("python -m core.download_model")
 
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("Starting Kokoro voices download from startup_event...")
