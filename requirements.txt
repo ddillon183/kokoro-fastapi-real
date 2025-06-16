@@ -176,7 +176,7 @@ networkx==3.4.2
     # via torch
 num2words==0.5.14
     # via misaki
-numpy==2.2.1
+numpy==1.26.4  # Last stable 1.x version as of 2024
     # via
     #   -r docs/requirements.in
     #   blis
@@ -242,6 +242,7 @@ pytest==8.0.0
     #   pytest-asyncio
 pytest-asyncio==0.23.5
     # via -r docs/requirements.in
+pytest-cov==4.1.0
 python-dateutil==2.9.0.post0
     # via csvw
 python-dotenv==1.0.1
