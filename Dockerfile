@@ -38,10 +38,14 @@ WORKDIR /app
 COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 
 # Create virtual environment and install dependencies
-RUN python -m venv /opt/venv && \
-    /opt/venv/bin/pip install --upgrade pip && \
-    /opt/venv/bin/pip install -r requirements.txt
+RUN python -m venv .venv && \
+    .venv/bin/pip install --upgrade pip && \
+    .venv/bin/pip install -r requirements.txt
 
+ENV PATH="/app/.venv/bin:$PATH"
+
+
+ENV PATH="/app/.venv/bin:$PATH"
 # Make sure the virtual environment is used in subsequent commands
 ENV PATH="/opt/venv/bin:$PATH"
 
