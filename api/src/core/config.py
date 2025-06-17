@@ -1,10 +1,9 @@
 import torch
 from pydantic_settings import BaseSettings
 
-
 class Settings(BaseSettings):
     # Model and voice path configs (required for Kokoro)
-    model_dir: str = "models"
+    model_dir: str = "models/v1_0"
     voices_dir: str = "voices"
 
     # API Settings
