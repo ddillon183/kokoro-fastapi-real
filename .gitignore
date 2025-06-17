@@ -48,9 +48,9 @@ ENV/
 
 # Project specific
 # Model files
-
 *.pth
 *.tar*
+models/v1_0/kokoro-v1_0.pth
 
 
 # Other project files
