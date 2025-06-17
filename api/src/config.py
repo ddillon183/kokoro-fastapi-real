@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     enable_web_player: bool = True
 
     # ✅ Add the correct model and voices directories
-    model_dir: str = "/app/models/v1_0"
+    model_dir: str = "models/v1_0"
     voices_dir: str = "/app/voices/v1_0"
 
     class Config:
