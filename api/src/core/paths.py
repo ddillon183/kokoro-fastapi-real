@@ -77,12 +77,7 @@ async def _scan_directories(
 
 async def get_model_path(model_name: str) -> str:
     """Get path to model file."""
-    api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-    if os.path.isabs(settings.model_dir):
-        model_dir = settings.model_dir
-    else:
-        model_dir = os.path.join(api_dir, settings.model_dir)
+    model_dir = os.path.abspath(settings.model_dir)
 
     os.makedirs(model_dir, exist_ok=True)
     search_paths = [model_dir]
