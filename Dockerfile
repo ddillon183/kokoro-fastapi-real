@@ -37,9 +37,9 @@ WORKDIR /app
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 
-# ✅ Use system Python to install dependencies
+# Use system Python to install deps
 RUN pip install --upgrade pip && \
-    pip install --use-feature=fast-deps --break-system-packages -r requirements.txt
+    pip install -r requirements.txt
 
 # Copy entire project
 COPY --chown=appuser:appuser api ./api
