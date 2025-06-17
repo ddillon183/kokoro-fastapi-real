@@ -37,9 +37,10 @@ WORKDIR /app
 # Copy requirement files and install dependencies
 COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 
-# Use system Python to install deps
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+# Create virtual environment and install dependencies
+RUN python -m venv .venv && \
+    .venv/bin/pip install --upgrade pip && \
+    .venv/bin/pip install -r requirements.txt
 
 # Copy entire project
 COPY --chown=appuser:appuser api ./api
