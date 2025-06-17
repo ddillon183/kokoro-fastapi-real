@@ -14,8 +14,13 @@ class Settings(BaseSettings):
     # Toggle beta web player
     enable_web_player: bool = True
 
+    # ✅ Add the correct model and voices directories
+    model_dir: str = "/app/models/v1_0"
+    voices_dir: str = "/app/voices/v1_0"
+
     class Config:
-        env_file = ".env"  # optional, if using environment variables
+        env_file = ".env"
 
 # Instantiate settings
 settings = Settings()
+
