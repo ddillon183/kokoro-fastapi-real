@@ -385,7 +385,7 @@ uritemplate==4.2.0
 urllib3==2.4.0
     # via requests
 uvicorn[standard]==0.23.2
-    # via -r docs/requirements.in
+# via -r docs/requirements.in
 uvloop==0.19.0
     # via -r docs/requirements.in
 wasabi==1.1.3

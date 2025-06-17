@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 import torch
 
+from pathlib import Path
 from api.src.inference.kokoro_v1 import KokoroV1
 
 
@@ -50,6 +51,10 @@ def test_clear_memory(mock_sync, mock_clear, kokoro_backend):
 @pytest.mark.asyncio
 async def test_load_model_validation(kokoro_backend):
     """Test model loading validation."""
+    model_path = Path("models/v1_0/kokoro-v1_0.pth")
+    if not model_path.exists():
+        pytest.skip("Skipping test: Kokoro model file not found")
+
     with pytest.raises(RuntimeError, match="Failed to load Kokoro model"):
         await kokoro_backend.load_model("nonexistent_model.pth")
 
@@ -68,7 +73,6 @@ def test_unload_with_pipelines(kokoro_backend):
     assert not kokoro_backend.is_loaded
     assert kokoro_backend._model is None
     assert kokoro_backend._pipelines == {}  # All pipelines should be cleared
-
 
 @pytest.mark.asyncio
 async def test_generate_validation(kokoro_backend):
