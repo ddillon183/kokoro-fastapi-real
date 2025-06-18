@@ -1,7 +1,8 @@
 """Kokoro V1 model management."""
 
 from typing import Optional
-
+import os
+import time
 from loguru import logger
 
 from api.src.core import paths
@@ -9,6 +10,7 @@ from api.src.core.config import settings
 from api.src.core.model_config import ModelConfig, model_config
 from api.src.inference.base import BaseModelBackend
 from api.src.inference.kokoro_v1 import KokoroV1
+
 
 class ModelManager:
     """Manages Kokoro V1 model loading and inference."""
@@ -23,7 +25,7 @@ class ModelManager:
             config: Optional model configuration override
         """
         self._config = config or model_config
-        self._backend: Optional[KokoroV1] = None  # Explicitly type as KokoroV1
+        self._backend: Optional[KokoroV1] = None
         self._device: Optional[str] = None
 
     def _determine_device(self) -> str:
@@ -36,7 +38,6 @@ class ModelManager:
             self._device = self._determine_device()
             logger.info(f"Initializing Kokoro V1 on {self._device}")
             self._backend = KokoroV1()
-
         except Exception as e:
             raise RuntimeError(f"Failed to initialize Kokoro V1: {e}")
 
@@ -52,28 +53,36 @@ class ModelManager:
         Raises:
             RuntimeError: If initialization fails
         """
-        import time
-
         start = time.perf_counter()
 
         try:
             # Initialize backend
             await self.initialize()
 
-            # Load model
+            # Load model with wait logic
             model_path = self._config.pytorch_kokoro_v1_file
+
+            # ✅ Wait for model to be available (max 10 seconds)
+            wait_time = 10
+            while not os.path.exists(model_path) and wait_time > 0:
+                logger.warning(f"Waiting for model file to exist at {model_path}... ({wait_time}s remaining)")
+                time.sleep(1)
+                wait_time -= 1
+
+            if not os.path.exists(model_path):
+                raise FileNotFoundError(f"Model file still not found after wait: {model_path}")
+
             await self.load_model(model_path)
 
-            # Use paths module to get voice path
+            # Load voices
             try:
                 voices = await paths.list_voices()
                 voice_path = await paths.get_voice_path(settings.default_voice)
 
-                # Warm up with short text
                 warmup_text = "Warmup text for initialization."
-                # Use default voice name for warmup
                 voice_name = settings.default_voice
                 logger.debug(f"Using default voice '{voice_name}' for warmup")
+
                 async for _ in self.generate(warmup_text, (voice_name, voice_path)):
                     pass
             except Exception as e:
@@ -83,17 +92,19 @@ class ModelManager:
             logger.info(f"Warmup completed in {ms}ms")
 
             return self._device, "kokoro_v1", len(voices)
+
         except FileNotFoundError as e:
             logger.error("""
 Model files not found! You need to download the Kokoro V1 model:
 
 1. Download model using the script:
-   python docker/scripts/download_model.py --output api/src/models/v1_0
+   python docker/scripts/download_model.py --output models/v1_0
 
 2. Or set environment variable in docker-compose:
    DOWNLOAD_MODEL=true
 """)
             exit(0)
+
         except Exception as e:
             raise RuntimeError(f"Warmup failed: {e}")
 
