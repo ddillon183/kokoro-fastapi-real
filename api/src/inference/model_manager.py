@@ -62,7 +62,6 @@ class ModelManager:
             # Load model with wait logic
             model_path = self._config.pytorch_kokoro_v1_file
 
-            # ✅ Wait for model to be available (max 10 seconds)
             wait_time = 10
             while not os.path.exists(model_path) and wait_time > 0:
                 logger.warning(f"Waiting for model file to exist at {model_path}... ({wait_time}s remaining)")
@@ -122,34 +121,32 @@ Model files not found! You need to download the Kokoro V1 model:
         return self._backend
 
     async def load_model(self, path: str) -> None:
-    """Load model using initialized backend.
+        """Load model using initialized backend.
 
-    Args:
-        path: Path to model file
+        Args:
+            path: Path to model file
 
-    Raises:
-        RuntimeError: If loading fails
-    """
-    if not self._backend:
-        raise RuntimeError("Backend not initialized")
+        Raises:
+            RuntimeError: If loading fails
+        """
+        if not self._backend:
+            raise RuntimeError("Backend not initialized")
 
-    # ✅ Move wait-check logic here so it's always enforced
-    wait_time = 10
-    while not os.path.exists(path) and wait_time > 0:
-        logger.warning(f"Waiting for model file to exist at {path}... ({wait_time}s remaining)")
-        time.sleep(1)
-        wait_time -= 1
+        wait_time = 10
+        while not os.path.exists(path) and wait_time > 0:
+            logger.warning(f"Waiting for model file to exist at {path}... ({wait_time}s remaining)")
+            time.sleep(1)
+            wait_time -= 1
 
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Model file still not found after wait: {path}")
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"Model file still not found after wait: {path}")
 
-    try:
-        await self._backend.load_model(path)
-    except FileNotFoundError as e:
-        raise e
-    except Exception as e:
-        raise RuntimeError(f"Failed to load model: {e}")
-
+        try:
+            await self._backend.load_model(path)
+        except FileNotFoundError as e:
+            raise e
+        except Exception as e:
+            raise RuntimeError(f"Failed to load model: {e}")
 
     async def generate(self, *args, **kwargs):
         """Generate audio using initialized backend.
