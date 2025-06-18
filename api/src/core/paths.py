@@ -14,6 +14,42 @@ from loguru import logger
 from api.src.core.config import settings
 
 
+"""Async file and path operations."""
+
+import io
+import json
+import os
+import time
+from pathlib import Path
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Set
+
+import aiofiles
+import aiofiles.os
+import torch
+from loguru import logger
+
+from api.src.core.config import settings
+
+
+async def _wait_for_file(path: str, timeout: int = 10) -> None:
+    """Wait for a file to exist at the given path.
+
+    Args:
+        path: Full path to file
+        timeout: Number of seconds to wait
+
+    Raises:
+        FileNotFoundError: If file still not found after timeout
+    """
+    while not os.path.exists(path) and timeout > 0:
+        logger.warning(f"Waiting for model file to appear at {path}... ({timeout}s remaining)")
+        time.sleep(1)
+        timeout -= 1
+
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"File not found after waiting: {path}")
+
+
 async def _find_file(
     filename: str,
     search_paths: List[str],
@@ -30,15 +66,17 @@ async def _find_file(
         Absolute path to file
 
     Raises:
-        RuntimeError: If file not found
+        FileNotFoundError: If file not found
     """
     if os.path.isabs(filename) and await aiofiles.os.path.exists(filename):
+        await _wait_for_file(filename)
         return filename
 
     for path in search_paths:
         full_path = os.path.join(path, filename)
         if await aiofiles.os.path.exists(full_path):
             if filter_fn is None or filter_fn(full_path):
+                await _wait_for_file(full_path)
                 return full_path
 
     raise FileNotFoundError(f"File not found: {filename} in paths: {search_paths}")
@@ -76,14 +114,26 @@ async def _scan_directories(
 
 
 async def get_model_path(model_name: str) -> str:
-    """Get path to model file."""
-    model_dir = os.path.abspath(settings.model_dir)
+    """Get path to model file.
 
+    Args:
+        model_name: The filename of the model to load
+
+    Returns:
+        Absolute path to the model file
+
+    Raises:
+        FileNotFoundError: If the model file is not found or doesn't appear in time
+    """
+    model_dir = os.path.abspath(settings.model_dir)
     os.makedirs(model_dir, exist_ok=True)
+
     search_paths = [model_dir]
     logger.debug(f"Searching for model in path: {model_dir}")
 
-    return await _find_file(model_name, search_paths)
+    model_path = await _find_file(model_name, search_paths)
+    logger.info(f"✅ Found model at: {model_path}")
+    return model_path
 
 
 async def get_voice_path(voice_name: str) -> str:
