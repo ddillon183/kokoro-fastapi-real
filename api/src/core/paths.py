@@ -32,21 +32,16 @@ from api.src.core.config import settings
 
 
 async def _wait_for_file(path: str, timeout: int = 10) -> None:
-    """Wait for a file to exist at the given path.
+    """Wait for a file to exist at the given path."""
+    import asyncio
+    import aiofiles.os
 
-    Args:
-        path: Full path to file
-        timeout: Number of seconds to wait
-
-    Raises:
-        FileNotFoundError: If file still not found after timeout
-    """
-    while not os.path.exists(path) and timeout > 0:
+    while not await aiofiles.os.path.exists(path) and timeout > 0:
         logger.warning(f"Waiting for model file to appear at {path}... ({timeout}s remaining)")
-        time.sleep(1)
+        await asyncio.sleep(1)
         timeout -= 1
 
-    if not os.path.exists(path):
+    if not await aiofiles.os.path.exists(path):
         raise FileNotFoundError(f"File not found after waiting: {path}")
 
 
