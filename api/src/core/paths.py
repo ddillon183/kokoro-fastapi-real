@@ -117,11 +117,10 @@ async def get_model_path(model_name: str) -> str:
 
 async def get_voice_path(voice_name: str) -> str:
     """Get path to voice file."""
-    api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
     if os.path.isabs(settings.voices_dir):
         voice_dir = settings.voices_dir
     else:
+        api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         voice_dir = os.path.join(api_dir, settings.voices_dir)
 
     os.makedirs(voice_dir, exist_ok=True)
@@ -133,21 +132,14 @@ async def get_voice_path(voice_name: str) -> str:
 
 
 async def list_voices() -> List[str]:
-    """List available voice files.
+    """List available voice files (without .pt extension)."""
+    if os.path.isabs(settings.voices_dir):
+        voice_dir = settings.voices_dir
+    else:
+        api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        voice_dir = os.path.join(api_dir, settings.voices_dir)
 
-    Returns:
-        List of voice names (without .pt extension)
-    """
-    # Get api directory path
-    api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-
-    # Construct voice directory path relative to api directory
-    voice_dir = os.path.join(api_dir, settings.voices_dir)
-
-    # Ensure voice directory exists
     os.makedirs(voice_dir, exist_ok=True)
-
-    # Search in voice directory
     search_paths = [voice_dir]
     logger.debug(f"Scanning for voices in path: {voice_dir}")
 
@@ -156,6 +148,7 @@ async def list_voices() -> List[str]:
 
     voices = await _scan_directories(search_paths, filter_voice_files)
     return sorted([name[:-3] for name in voices])  # Remove .pt extension
+
 
 
 async def load_voice_tensor(
