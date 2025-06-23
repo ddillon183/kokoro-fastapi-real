@@ -109,26 +109,10 @@ async def _scan_directories(
 
 
 async def get_model_path(model_name: str) -> str:
-    """Get path to model file.
-
-    Args:
-        model_name: The filename of the model to load
-
-    Returns:
-        Absolute path to the model file
-
-    Raises:
-        FileNotFoundError: If the model file is not found or doesn't appear in time
-    """
-    model_dir = os.path.abspath(settings.model_dir)
-    os.makedirs(model_dir, exist_ok=True)
-
-    search_paths = [model_dir]
-    logger.debug(f"Searching for model in path: {model_dir}")
-
-    model_path = await _find_file(model_name, search_paths)
-    logger.info(f"✅ Found model at: {model_path}")
-    return model_path
+    """Get path to model file."""
+    search_paths = ["/app/models/v1_0"]
+    logger.debug(f"Searching for model in path: {search_paths[0]}")
+    return await _find_file(model_name, search_paths)
 
 
 async def get_voice_path(voice_name: str) -> str:

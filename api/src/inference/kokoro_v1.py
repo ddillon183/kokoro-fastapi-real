@@ -36,7 +36,7 @@ class KokoroV1(BaseModelBackend):
         """
         try:
             # Get verified model path
-            model_path = await paths.get_model_path(model_config.pytorch_kokoro_v1_file)
+            model_path = await paths.get_model_path(model_config.pytorch_kokoro_v1_file = "kokoro-v1_0.pth")
             config_path = os.path.join(os.path.dirname(model_path), "config.json")
 
             if not os.path.exists(config_path):

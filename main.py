@@ -35,23 +35,9 @@ async def startup_event():
         logger.info("Downloading model files...")
         subprocess.call(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"])
 
-        # Wait until kokoro model file is fully written
-        import asyncio
-        import aiofiles.os
-        model_path = "app/models/v1_0/kokoro-v1_0.pth"
-        timeout = 30
-        while not await aiofiles.os.path.exists(model_path) and timeout > 0:
-            logger.warning(f"Waiting for model file to be available at: {model_path}... ({timeout}s left)")
-            await asyncio.sleep(1)
-            timeout -= 1
-        if not await aiofiles.os.path.exists(model_path):
-            raise FileNotFoundError(f"Model file not found after waiting: {model_path}")
-        logger.info(f"✅ Model file detected at: {model_path}")
-
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("Downloading voice files...")
         subprocess.call(["python", "download_voices.py"])
-
 
 def setup_logger():
     """Configure loguru logger with custom formatting"""

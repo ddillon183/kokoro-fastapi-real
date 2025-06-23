@@ -64,4 +64,7 @@ ENV PYTHONUNBUFFERED=1 \
 # Clean up .pyc etc
 RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf || true
 
+ENTRYPOINT ["bash", "docker/scripts/entrypoint.sh"]
+
+
 
