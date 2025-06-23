@@ -117,11 +117,7 @@ async def get_model_path(model_name: str) -> str:
 
 async def get_voice_path(voice_name: str) -> str:
     """Get path to voice file."""
-    if os.path.isabs(settings.voices_dir):
-        voice_dir = settings.voices_dir
-    else:
-        api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        voice_dir = os.path.join(api_dir, settings.voices_dir)
+    voice_dir = settings.voices_dir  # <- Trust the config directly
 
     if not os.path.exists(voice_dir):
         raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
@@ -135,11 +131,7 @@ async def get_voice_path(voice_name: str) -> str:
 
 async def list_voices() -> List[str]:
     """List available voice files (without .pt extension)."""
-    if os.path.isabs(settings.voices_dir):
-        voice_dir = settings.voices_dir
-    else:
-        api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        voice_dir = os.path.join(api_dir, settings.voices_dir)
+    voice_dir = settings.voices_dir  # <- Again, use config directly
 
     if not os.path.exists(voice_dir):
         raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
