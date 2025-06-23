@@ -123,7 +123,9 @@ async def get_voice_path(voice_name: str) -> str:
         api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         voice_dir = os.path.join(api_dir, settings.voices_dir)
 
-    os.makedirs(voice_dir, exist_ok=True)
+    if not os.path.exists(voice_dir):
+        raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
+
     voice_file = f"{voice_name}.pt"
     search_paths = [voice_dir]
     logger.debug(f"Searching for voice in path: {voice_dir}")
@@ -139,7 +141,9 @@ async def list_voices() -> List[str]:
         api_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         voice_dir = os.path.join(api_dir, settings.voices_dir)
 
-    os.makedirs(voice_dir, exist_ok=True)
+    if not os.path.exists(voice_dir):
+        raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
+
     search_paths = [voice_dir]
     logger.debug(f"Scanning for voices in path: {voice_dir}")
 
@@ -148,7 +152,6 @@ async def list_voices() -> List[str]:
 
     voices = await _scan_directories(search_paths, filter_voice_files)
     return sorted([name[:-3] for name in voices])  # Remove .pt extension
-
 
 
 async def load_voice_tensor(
