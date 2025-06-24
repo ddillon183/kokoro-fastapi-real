@@ -42,16 +42,18 @@ RUN python -m venv .venv && \
     .venv/bin/pip install --upgrade pip && \
     .venv/bin/pip install --no-cache-dir -r requirements.txt
 
-# Copy entire project
-COPY --chown=appuser:appuser \
-    api ./api \
-    web ./web \
-    docker/scripts/ ./docker/scripts \
-    download_voices.py ./download_voices.py \
-    main.py ./main.py \
-    models ./models \
-    voices /app/voices/v1_0
+# Copy project components individually to ensure presence
+COPY --chown=appuser:appuser api ./api
+COPY --chown=appuser:appuser web ./web
+COPY --chown=appuser:appuser docker/scripts/entrypoint.sh ./docker/scripts/entrypoint.sh
+COPY --chown=appuser:appuser docker/scripts/download_model.py ./docker/scripts/download_model.py
+COPY --chown=appuser:appuser docker/scripts/update_requirements.sh ./docker/scripts/update_requirements.sh
+COPY --chown=appuser:appuser download_voices.py ./download_voices.py
+COPY --chown=appuser:appuser main.py ./main.py
+COPY --chown=appuser:appuser models ./models
+COPY --chown=appuser:appuser voices /app/voices/v1_0
 
+# Make sure entrypoint and directories are executable
 RUN chmod +x ./docker/scripts/entrypoint.sh
 RUN chmod -R 755 /app/voices /app/models
 
