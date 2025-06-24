@@ -40,16 +40,20 @@ COPY --chown=appuser:appuser requirements.txt ./requirements.txt
 # Create virtual environment and install dependencies
 RUN python -m venv .venv && \
     .venv/bin/pip install --upgrade pip && \
-    .venv/bin/pip install -r requirements.txt
+    .venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Copy entire project
-COPY --chown=appuser:appuser api ./api
-COPY --chown=appuser:appuser web ./web
-COPY --chown=appuser:appuser docker/scripts/ ./docker/scripts
-COPY --chown=appuser:appuser download_voices.py ./download_voices.py
-COPY --chown=appuser:appuser main.py ./main.py
-COPY --chown=appuser:appuser models ./models
+COPY --chown=appuser:appuser \
+    api ./api \
+    web ./web \
+    docker/scripts/ ./docker/scripts \
+    download_voices.py ./download_voices.py \
+    main.py ./main.py \
+    models ./models \
+    voices /app/voices/v1_0
+
 RUN chmod +x ./docker/scripts/entrypoint.sh
+RUN chmod -R 755 /app/voices /app/models
 
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
