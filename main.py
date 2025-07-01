@@ -50,11 +50,19 @@ async def lifespan(app: FastAPI):
     # Download assets if requested
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("⬇️ Downloading model files...")
-        subprocess.call(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"])
+        result = subprocess.run(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"], capture_output=True, text=True)
+        if result.returncode != 0:
+            logger.error(f"❌ Model download failed:\n{result.stderr}")
+            raise RuntimeError("Model download failed.")
+        logger.debug(result.stdout)
 
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("⬇️ Downloading voice files...")
-        subprocess.call(["python", "download_voices.py"])
+        result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
+        if result.returncode != 0:
+            logger.error(f"❌ Voice download failed:\n{result.stderr}")
+            raise RuntimeError("Voice download failed.")
+        logger.debug(result.stdout)
 
     await cleanup_temp_files()
     logger.info("🚀 Initializing TTS model and voices...")
@@ -62,7 +70,6 @@ async def lifespan(app: FastAPI):
     try:
         model_manager = await get_manager()
         voice_manager = await get_voice_manager()
-
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
 
         banner = f"""
@@ -116,10 +123,11 @@ app.include_router(debug_router)
 if settings.enable_web_player:
     app.include_router(web_router, prefix="/web")
 
-# Health
+
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
 
 @app.get("/v1/test")
 async def test_check():
