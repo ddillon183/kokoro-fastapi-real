@@ -16,6 +16,10 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
 fi
 
 # Start FastAPI server
+echo "🔍 Listing voices in /app/voices/v1_0:"
+ls -l /app/voices/v1_0 || echo "❌ voices folder NOT found at /app/voices/v1_0"
+
 echo "Starting FastAPI server..."
 uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
+
 
