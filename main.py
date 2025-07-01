@@ -47,25 +47,31 @@ async def lifespan(app: FastAPI):
     from api.src.services.temp_manager import cleanup_temp_files
     import torch
 
-    # Download model files if requested
+    # Download model if requested
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("⬇️ Downloading model files...")
-        result = subprocess.run(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"],
+            capture_output=True, text=True
+        )
         if result.returncode != 0:
             logger.error(f"❌ Model download failed:\n{result.stderr}")
             raise RuntimeError("Model download failed.")
         logger.debug(result.stdout)
 
-    # Download voices separately if requested
+    # Download voices if requested
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("⬇️ Downloading voice files...")
-        result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
+        result = subprocess.run(
+            ["python", "download_voices.py"],
+            capture_output=True, text=True
+        )
         if result.returncode != 0:
             logger.error(f"❌ Voice download failed:\n{result.stderr}")
             raise RuntimeError("Voice download failed.")
         logger.debug(result.stdout)
 
-    # Ensure voices directory exists after download
+    # ✅ Ensure voices directory exists
     voices_path = settings.voices_dir
     if not os.path.exists(voices_path):
         logger.error(f"❌ Voices directory does not exist at expected path: {voices_path}")
@@ -73,7 +79,7 @@ async def lifespan(app: FastAPI):
     else:
         logger.info(f"✅ Voices directory verified at: {voices_path}")
 
-    # Clean up temp files
+    # Clean temp files & initialize TTS
     await cleanup_temp_files()
     logger.info("🚀 Initializing TTS model and voices...")
 
@@ -100,6 +106,7 @@ Voice Packs Loaded: {voicepack_count}
         if settings.enable_web_player:
             banner += f"\nWeb Player: http://{settings.host}:{settings.port}/web/"
         logger.info(banner)
+
     except Exception as e:
         logger.error(f"❌ Failed to initialize model or voices: {e}")
         raise
