@@ -1,0 +1,77 @@
+[33mcommit 19fddcd010b2fed1faf25cf30c9a32d69a689953[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jul 1 14:22:49 2025 -0400
+
+    Add missing loguru dependency
+
+[33mcommit a1acb39f98caa1c26bf202f50e459d761f577c0b[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jul 1 14:08:20 2025 -0400
+
+    🔥 Finally adding requirements.txt to fix Railway build
+
+[33mcommit c7605dcc3873204e77982215e3213535aeaba5f9[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jul 1 14:06:36 2025 -0400
+
+    ✅ Force re-add requirements.txt to fix missing pip deps
+
+[33mcommit 0e68006dc64fc1dcea8f626a78b0f6f6da1e78d8[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jul 1 13:57:14 2025 -0400
+
+    Recreate and commit requirements.txt
+
+[33mcommit f6b15b4898acfe167ffd24855c59cef38e2aba75[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jun 17 17:45:11 2025 -0400
+
+    Fix: use venv in Dockerfile and reorder numpy in requirements
+
+[33mcommit 29d199e201945bb9dbc2c96574b9795c602ea174[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jun 17 16:52:08 2025 -0400
+
+    Fix: skip test if model not present; cleanup requirements.txt
+
+[33mcommit 75f079cfbe892e7825238624e7fdfbd32aaf882f[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Tue Jun 17 16:01:49 2025 -0400
+
+    Fix: pin NumPy to 1.26.4 for compatibility with kokoro and other deps
+
+[33mcommit b6fa0ad7445d9eb46f9b5e9658821d87041f5578[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Sun Jun 15 23:57:24 2025 -0400
+
+    Fix: relax numpy version to avoid dependency conflict
+
+[33mcommit c23574158dacb43072c8c631411533d965821984[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Sun Jun 15 23:54:22 2025 -0400
+
+    Fix: downgrade numpy to 1.26.4 for compatibility
+
+[33mcommit 09dc126c4af7934124f2dab3dfbc6b9175b753ec[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Sun Jun 15 23:24:45 2025 -0400
+
+    Fix: updated numpy compatibility and corrected test import path
+
+[33mcommit fc0ead124785cb200e5f6839f3a3c132bf1bc2d1[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Sun Jun 15 23:04:26 2025 -0400
+
+    fix: add pytest-cov to support coverage reporting
+
+[33mcommit cc3c9a21f0047560536fedf8fa10fdf6f0b0a7d1[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Sun Jun 15 18:09:33 2025 -0400
+
+    Upgrade uvicorn to standard version for proper startup
+
+[33mcommit b6afa7f50a532e99731e84b9c4164528cc3bd025[m
+Author: ddillon183 <danielgdillon@gmail.com>
+Date:   Thu Jun 12 20:24:17 2025 -0400
+
+    Force add requirements.txt for Docker build

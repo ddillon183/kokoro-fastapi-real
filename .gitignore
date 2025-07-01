@@ -93,4 +93,3 @@ voices/v1_0/
 api/src/voices/v1_0/
 *.pt.pt
 
-!requirements.txt

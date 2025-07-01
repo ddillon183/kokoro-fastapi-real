@@ -56,7 +56,7 @@ async def lifespan(app: FastAPI):
             raise RuntimeError("Model download failed.")
         logger.debug(result.stdout)
 
-        if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
+    if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("⬇️ Downloading voice files...")
         result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
         if result.returncode != 0:
@@ -72,7 +72,6 @@ async def lifespan(app: FastAPI):
         else:
             logger.info(f"✅ Voices directory verified at: {voices_path}")
 
-
     await cleanup_temp_files()
     logger.info("🚀 Initializing TTS model and voices...")
 
@@ -82,6 +81,7 @@ async def lifespan(app: FastAPI):
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
 
         banner = f"""
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     ╔═╗┌─┐┌─┐┌┬┐
