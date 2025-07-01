@@ -32,3 +32,6 @@ docker-compose*
 # ✅ Explicitly allow voices (double-confirmed)
 !voices/
 !voices/v1_0/
+
+# ✅ Explicitly allow requirements.txt despite *.txt ignore
+!requirements.txt
