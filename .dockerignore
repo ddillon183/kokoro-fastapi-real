@@ -23,7 +23,6 @@ ui/
 tests/
 
 # Dockerfiles
-Dockerfile*
 docker-compose*
 
 # ✅ DO NOT ignore voices!
