@@ -1,46 +1,34 @@
-# Version control
+# General ignores
 .git
-
-# Python
-__pycache__
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
-.Python
-*.py[cod]
-*$py.class
-.pytest_cache
-.coverage
-.coveragerc
-
-# Environment
-# .env
+*.pytest_cache
+*.md
+*.txt
+.env
 .venv
-env/
 venv/
+env/
 ENV/
 
 # IDE
 .idea
 .vscode
-*.swp
-*.swo
 
-# Project specific
-examples/
+# Project-specific
 Kokoro-82M/
 ui/
 tests/
-*.md
-*.txt
-!requirements.txt
 
-# Docker
+# Dockerfiles
 Dockerfile*
 docker-compose*
 
-# ✅ Ensure voices folder IS included
+# ✅ DO NOT ignore voices!
+# REMOVE any exclusions that hide "voices" folder
+
+# ✅ Explicitly allow voices (double-confirmed)
 !voices/
-
-
-
+!voices/v1_0/
