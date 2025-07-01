@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings
+from pydantic import Field  # ✅ ADD THIS LINE
 
 class Settings(BaseSettings):
     api_title: str = "Kokoro TTS API"
