@@ -39,9 +39,8 @@ tests/
 Dockerfile*
 docker-compose*
 
-!web/
+# ✅ Ensure voices folder IS included
 !voices/
-!voices/v1_0/
 
 
 
