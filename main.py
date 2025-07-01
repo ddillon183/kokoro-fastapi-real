@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
     from api.src.services.temp_manager import cleanup_temp_files
     import torch
 
-    # Download assets if requested
+    # Download model files if requested
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
         logger.info("⬇️ Downloading model files...")
         result = subprocess.run(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"], capture_output=True, text=True)
@@ -56,6 +56,7 @@ async def lifespan(app: FastAPI):
             raise RuntimeError("Model download failed.")
         logger.debug(result.stdout)
 
+    # Download voices separately if requested
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("⬇️ Downloading voice files...")
         result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
@@ -64,14 +65,15 @@ async def lifespan(app: FastAPI):
             raise RuntimeError("Voice download failed.")
         logger.debug(result.stdout)
 
-        # 🔍 Ensure voices directory exists after download
-        voices_path = settings.voices_dir
-        if not os.path.exists(voices_path):
-            logger.error(f"❌ Voices directory does not exist at expected path: {voices_path}")
-            raise RuntimeError(f"Voices directory not found: {voices_path}")
-        else:
-            logger.info(f"✅ Voices directory verified at: {voices_path}")
+    # Ensure voices directory exists after download
+    voices_path = settings.voices_dir
+    if not os.path.exists(voices_path):
+        logger.error(f"❌ Voices directory does not exist at expected path: {voices_path}")
+        raise RuntimeError(f"Voices directory not found: {voices_path}")
+    else:
+        logger.info(f"✅ Voices directory verified at: {voices_path}")
 
+    # Clean up temp files
     await cleanup_temp_files()
     logger.info("🚀 Initializing TTS model and voices...")
 
@@ -81,7 +83,6 @@ async def lifespan(app: FastAPI):
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
 
         banner = f"""
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     ╔═╗┌─┐┌─┐┌┬┐
@@ -96,17 +97,14 @@ Model: {model}
 Device: {device}
 Voice Packs Loaded: {voicepack_count}
 """
-
         if settings.enable_web_player:
             banner += f"\nWeb Player: http://{settings.host}:{settings.port}/web/"
-
         logger.info(banner)
     except Exception as e:
         logger.error(f"❌ Failed to initialize model or voices: {e}")
         raise
 
     yield
-
 
 app = FastAPI(
     title=settings.api_title,
