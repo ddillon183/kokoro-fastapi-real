@@ -1,10 +1,13 @@
 import os
 import requests
 
-# 🔧 Fix path to ensure it works on Railway deployment
-CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEST_FOLDER = os.path.join(CURRENT_DIR, "../../voices/v1_0")  # resolves to /app/voices/v1_0
+# Ensure we're inside the Railway-compatible directory
+DEST_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "voices", "v1_0")
+
+# Create the directory if it doesn't exist
 os.makedirs(DEST_FOLDER, exist_ok=True)
+
+print(f"Saving voices to: {DEST_FOLDER}")
 
 # List of tuples: (Google Drive URL, voice filename)
 voices = [
