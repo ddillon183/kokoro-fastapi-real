@@ -62,7 +62,6 @@ app
 api/temp_files/
 
 # Docker
-Dockerfile*
 docker-compose*
 examples/ebook_test/chapter_to_audio.py
 examples/ebook_test/chapters_to_audio.py
@@ -94,3 +93,4 @@ voices/v1_0/
 api/src/voices/v1_0/
 *.pt.pt
 
+!requirements.txt
