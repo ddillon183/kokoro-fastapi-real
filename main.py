@@ -56,13 +56,22 @@ async def lifespan(app: FastAPI):
             raise RuntimeError("Model download failed.")
         logger.debug(result.stdout)
 
-    if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
+        if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
         logger.info("⬇️ Downloading voice files...")
         result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
         if result.returncode != 0:
             logger.error(f"❌ Voice download failed:\n{result.stderr}")
             raise RuntimeError("Voice download failed.")
         logger.debug(result.stdout)
+
+        # 🔍 Ensure voices directory exists after download
+        voices_path = settings.voices_dir
+        if not os.path.exists(voices_path):
+            logger.error(f"❌ Voices directory does not exist at expected path: {voices_path}")
+            raise RuntimeError(f"Voices directory not found: {voices_path}")
+        else:
+            logger.info(f"✅ Voices directory verified at: {voices_path}")
+
 
     await cleanup_temp_files()
     logger.info("🚀 Initializing TTS model and voices...")
