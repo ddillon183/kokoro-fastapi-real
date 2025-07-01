@@ -40,5 +40,8 @@ Dockerfile*
 docker-compose*
 
 !web/
-!docker/scripts/
+!voices/
+!voices/v1_0/
+
+
 
