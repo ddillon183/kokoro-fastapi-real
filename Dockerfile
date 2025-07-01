@@ -51,7 +51,9 @@ COPY --chown=appuser:appuser docker/scripts/update_requirements.sh ./docker/scri
 COPY --chown=appuser:appuser download_voices.py ./download_voices.py
 COPY --chown=appuser:appuser main.py ./main.py
 COPY --chown=appuser:appuser models ./models
-COPY --chown=appuser:appuser voices /app/voices/v1_0
+
+# Corrected: copy contents inside voices/v1_0 to /app/voices/v1_0
+COPY --chown=appuser:appuser voices/v1_0 /app/voices/v1_0
 
 # Make sure entrypoint and directories are executable
 RUN chmod +x ./docker/scripts/entrypoint.sh
