@@ -66,9 +66,9 @@ async def lifespan(app: FastAPI):
 
     # ✅ Check directory exists
     voices_path = settings.voices_dir
+
     if not os.path.exists(voices_path):
-        logger.error(f"❌ Voices directory does not exist at expected path: {voices_path}")
-        raise RuntimeError(f"Voices directory not found: {voices_path}")
+        logger.warning(f"⚠️ Voices directory missing at {voices_path}. Voice loading may fail.")
     else:
         logger.info(f"✅ Voices directory verified at: {voices_path}")
 
@@ -79,8 +79,6 @@ async def lifespan(app: FastAPI):
         model_manager = await get_manager()
         voice_manager = await get_voice_manager()
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
-
-        banner = f"""
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     ╔═╗┌─┐┌─┐┌┬┐

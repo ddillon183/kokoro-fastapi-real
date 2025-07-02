@@ -1,10 +1,8 @@
 import os
 import requests
 
-# Ensure we're inside the Railway-compatible directory
-DEST_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "voices", "v1_0")
-
-# Create the directory if it doesn't exist
+# Use a writable temp folder in Railway (inside /tmp or current dir)
+DEST_FOLDER = os.path.join(os.path.dirname(__file__), "../../tmp/voices/v1_0")
 os.makedirs(DEST_FOLDER, exist_ok=True)
 
 print(f"Saving voices to: {DEST_FOLDER}")
