@@ -49,31 +49,31 @@ async def lifespan(app: FastAPI):
 
     # Download assets if requested
     if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
-        logger.info("⬇️ Downloading model files...")
+        logger.info("Downloading model files...")
         result = subprocess.run(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"], capture_output=True, text=True)
         if result.returncode != 0:
-            logger.error(f"❌ Model download failed:\n{result.stderr}")
+            logger.error(f"Model download failed:\n{result.stderr}")
             raise RuntimeError("Model download failed.")
         logger.debug(result.stdout)
 
     if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
-        logger.info("⬇️ Downloading voice files...")
+        logger.info("Downloading voice files...")
         result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
         if result.returncode != 0:
-            logger.error(f"❌ Voice download failed:\n{result.stderr}")
+            logger.error(f"Voice download failed:\n{result.stderr}")
             raise RuntimeError("Voice download failed.")
         logger.debug(result.stdout)
 
-    # ✅ Check directory exists
+    # Check directory exists
     voices_path = settings.voices_dir
 
     if not os.path.exists(voices_path):
-        logger.warning(f"⚠️ Voices directory missing at {voices_path}. Voice loading may fail.")
+        logger.warning(f"Voices directory missing at {voices_path}. Voice loading may fail.")
     else:
-        logger.info(f"✅ Voices directory verified at: {voices_path}")
+        logger.info(f"Voices directory verified at: {voices_path}")
 
     await cleanup_temp_files()
-    logger.info("🚀 Initializing TTS model and voices...")
+    logger.info("Initializing TTS model and voices...")
 
     try:
         model_manager = await get_manager()
@@ -97,7 +97,7 @@ Voice Packs Loaded: {voicepack_count}
             banner += f"\nWeb Player: http://{settings.host}:{settings.port}/web/"
         logger.info(banner)
     except Exception as e:
-        logger.error(f"❌ Failed to initialize model or voices: {e}")
+        logger.error(f"Failed to initialize model or voices: {e}")
         raise
 
     yield

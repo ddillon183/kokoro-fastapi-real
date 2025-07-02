@@ -119,7 +119,7 @@ async def get_voice_path(voice_name: str) -> str:
     """Get path to voice file."""
     voice_dir = settings.voices_dir  # <- Trust the config directly
 
-    logger.warning(f"✅ [DEBUG] settings.voices_dir resolved as: {settings.voices_dir}")
+    logger.warning(f"[DEBUG] settings.voices_dir resolved as: {settings.voices_dir}")
 
     if not os.path.exists(voice_dir):
         raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
@@ -135,7 +135,7 @@ async def list_voices() -> List[str]:
     """List available voice files (without .pt extension)."""
     voice_dir = settings.voices_dir  # <- Again, use config directly
 
-    logger.warning(f"✅ [DEBUG] settings.voices_dir resolved as: {settings.voices_dir}")
+    logger.warning(f"[DEBUG] settings.voices_dir resolved as: {settings.voices_dir}")
 
     if not os.path.exists(voice_dir):
         raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
