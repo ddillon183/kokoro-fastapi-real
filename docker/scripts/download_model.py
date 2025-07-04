@@ -44,10 +44,12 @@ def download_model(output_dir: str) -> None:
         logger.error(f"❌ Model download failed: {e}")
         raise
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="models/v1_0", help="Target directory for model files")
+    default_dir = os.environ.get("MODEL_DIR", "models/v1_0")
+    parser.add_argument("--output", default=default_dir, help="Target directory for model files")
+
     args = parser.parse_args()
 
     download_model(args.output)
+
