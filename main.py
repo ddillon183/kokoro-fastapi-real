@@ -38,16 +38,26 @@ async def lifespan(app: FastAPI):
     from api.src.inference.model_manager import get_manager
     from api.src.inference.voice_manager import get_manager as get_voice_manager
     from api.src.services.temp_manager import cleanup_temp_files
+    import subprocess
 
-    voices_path = settings.VOICES_DIR  # ✅ Fixed case
+    # Download voice files BEFORE checking the path
+    if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
+        logger.info("[INIT] Downloading voice files...")
+        result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
+        if result.returncode != 0:
+            logger.error(f"[ERROR] Voice download failed:\n{result.stderr}")
+            raise RuntimeError("Voice download failed.")
+        logger.debug(result.stdout)
 
+    voices_path = settings.VOICES_DIR
     if not os.path.exists(voices_path):
-        logger.warning(f"[WARN] Voices directory missing at {voices_path}. Voice loading may fail.")
+        logger.error(f"[FATAL] Voices directory missing after download at: {voices_path}")
+        raise RuntimeError("Voices directory missing after download.")
     else:
-        logger.info(f"[INFO] Voices directory verified at: {voices_path}")
+        logger.info(f"[OK] Voices directory verified at: {voices_path}")
 
     await cleanup_temp_files()
-    logger.info("Initializing TTS model and voices...")
+    logger.info("[INIT] Initializing TTS model and voices...")
 
     try:
         model_manager = await get_manager()
