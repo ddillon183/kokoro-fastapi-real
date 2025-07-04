@@ -39,11 +39,12 @@ async def lifespan(app: FastAPI):
     from api.src.inference.voice_manager import get_manager as get_voice_manager
     from api.src.services.temp_manager import cleanup_temp_files
 
-    voices_path = settings.voices_dir
+    voices_path = settings.VOICES_DIR  # ✅ Fixed case
+
     if not os.path.exists(voices_path):
-        logger.warning(f"❌ Voices directory missing at {voices_path}. Voice loading may fail.")
+        logger.warning(f"[WARN] Voices directory missing at {voices_path}. Voice loading may fail.")
     else:
-        logger.info(f"✅ Voices directory verified at: {voices_path}")
+        logger.info(f"[INFO] Voices directory verified at: {voices_path}")
 
     await cleanup_temp_files()
     logger.info("Initializing TTS model and voices...")
@@ -54,23 +55,22 @@ async def lifespan(app: FastAPI):
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
 
         banner = (
-            "✅ Model Initialized\n"
-            f"🧠 Model: {model}\n"
-            f"💻 Device: {device}\n"
-            f"🎙️ Voice Packs Loaded: {voicepack_count}\n"
+            "\n[BOOT SUCCESS]\n"
+            f"Model: {model}\n"
+            f"Device: {device}\n"
+            f"Voice Packs Loaded: {voicepack_count}\n"
         )
 
         if settings.enable_web_player:
-            banner += f"🌐 Web Player: http://{settings.host}:{settings.port}/web/"
+            banner += f"Web Player: http://{settings.host}:{settings.port}/web/"
 
         logger.info(banner)
 
     except Exception as e:
-        logger.error(f"❌ Failed to initialize model or voices: {e}")
+        logger.error(f"[ERROR] Failed to initialize model or voices: {e}")
         raise
 
     yield
-
 
 app = FastAPI(
     title=settings.api_title,
