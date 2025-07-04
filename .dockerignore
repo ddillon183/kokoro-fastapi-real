@@ -34,3 +34,4 @@ docker-compose*
 
 # ✅ Explicitly allow requirements.txt despite *.txt ignore
 !requirements.txt
+!requirements.prod.txt
