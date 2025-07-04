@@ -24,7 +24,7 @@ if not os.path.exists(espeak_file):
     sys.exit(1)
 
 # Read the current content
-with open(espeak_file, "r") as f:
+with open(espeak_file, "r", encoding="utf-8", errors="ignore") as f:
     content = f.read()
 
 # Check if the problematic line exists
@@ -37,7 +37,7 @@ if "EspeakWrapper.set_data_path(espeakng_loader.get_data_path())" in content:
     )
 
     # Write the modified content back
-    with open(espeak_file, "w") as f:
+    with open(espeak_file, "w", encoding="utf-8") as f:
         f.write(new_content)
 
     print(f"Successfully patched {espeak_file}")

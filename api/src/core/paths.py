@@ -110,7 +110,7 @@ async def _scan_directories(
 
 async def get_model_path(model_name: str) -> str:
     """Get path to model file."""
-    search_paths = ["/app/models/v1_0"]
+    search_paths = [settings.MODEL_DIR]  # ✅ uses your env var
     logger.debug(f"Searching for model in path: {search_paths[0]}")
     return await _find_file(model_name, search_paths)
 
