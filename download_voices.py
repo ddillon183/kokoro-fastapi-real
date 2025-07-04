@@ -2,7 +2,7 @@ import os
 import requests
 from api.src.core.config import settings
 
-DEST_FOLDER = os.path.join(os.path.dirname(__file__), "voices/v1_0")
+DEST_FOLDER = os.environ.get("VOICES_DIR", os.path.join("voices", "v1_0"))
 os.makedirs(DEST_FOLDER, exist_ok=True)
 
 print(f"✅ Saving voices to: {DEST_FOLDER}")
