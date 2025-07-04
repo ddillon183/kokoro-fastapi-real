@@ -28,8 +28,11 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
     echo "✅ Model downloaded."
 fi
 
-echo "🚀 Starting FastAPI server..."
-/app/.venv/bin/uvicorn api.src.main:app --host 0.0.0.0 --port 8888 --loop uvloop --workers 4
-
+echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
+exec /app/.venv/bin/gunicorn api.src.main:app \
+  --workers 4 \
+  --worker-class uvicorn.workers.UvicornWorker \
+  --bind 0.0.0.0:8888 \
+  --timeout 120
 
 
