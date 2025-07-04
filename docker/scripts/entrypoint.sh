@@ -14,22 +14,23 @@ echo "📦 Using Uvicorn from venv: $(realpath /app/.venv/bin/uvicorn)"
 export VOICES_DIR=/app/voices/v1_0
 echo "📁 Set VOICES_DIR to: $VOICES_DIR"
 
-# ✅ Always download voices
-echo "⬇️ Downloading voices..."
-/app/.venv/bin/python download_voices.py
-echo "✅ Voices downloaded."
+# ✅ Download voices if enabled
+if [ "$DOWNLOAD_VOICES" = "true" ]; then
+    echo "⬇️ Downloading voices..."
+    /app/.venv/bin/python download_voices.py
+    echo "✅ Voices downloaded."
+fi
 
-# ✅ Always download model
-echo "⬇️ Downloading Kokoro model..."
-/app/.venv/bin/python docker/scripts/download_model.py --output api/src/models/v1_0
-echo "✅ Model downloaded."
+# ✅ Download model if enabled
+if [ "$DOWNLOAD_MODEL" = "true" ]; then
+    echo "⬇️ Downloading model..."
+    /app/.venv/bin/python docker/scripts/download_model.py --output models/v1_0
+    echo "✅ Model downloaded."
+fi
 
-# ✅ Launch Gunicorn with 4 workers
 echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
-exec /app/.venv/bin/gunicorn api.src.main:app \
+exec /app/.venv/bin/gunicorn main:app \
   --workers 4 \
   --worker-class uvicorn.workers.UvicornWorker \
   --bind 0.0.0.0:8888 \
   --timeout 120
-
-
