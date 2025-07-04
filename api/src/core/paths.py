@@ -133,20 +133,25 @@ async def get_voice_path(voice_name: str) -> str:
 
 async def list_voices() -> List[str]:
     """List available voice files (without .pt extension)."""
-    voice_dir = settings.voices_dir  # <- Again, use config directly
+    voice_dir = settings.voices_dir  # <- Resolved from config/env
 
-    logger.warning(f"[DEBUG] settings.voices_dir resolved as: {settings.voices_dir}")
+    logger.warning(f"[DEBUG] settings.voices_dir resolved as: {voice_dir}")
 
     if not os.path.exists(voice_dir):
-        raise RuntimeError(f"Voices directory does not exist at: {voice_dir}")
+        raise RuntimeError(f"❌ Voices directory does not exist at: {voice_dir}")
 
     search_paths = [voice_dir]
-    logger.debug(f"Scanning for voices in path: {voice_dir}")
+    logger.debug(f"📂 Scanning for voice files in: {voice_dir}")
 
     def filter_voice_files(name: str) -> bool:
         return name.endswith(".pt")
 
     voices = await _scan_directories(search_paths, filter_voice_files)
+
+    if not voices:
+        raise RuntimeError(f"❌ No voice .pt files found in: {voice_dir}")
+
+    logger.info(f"✅ Found {len(voices)} voice files.")
     return sorted([name[:-3] for name in voices])  # Remove .pt extension
 
 

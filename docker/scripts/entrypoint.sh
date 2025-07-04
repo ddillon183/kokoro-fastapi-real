@@ -14,10 +14,18 @@ echo "📦 Using Uvicorn from venv: $(realpath /app/.venv/bin/uvicorn)"
 export VOICES_DIR=/app/voices/v1_0
 echo "📁 Set VOICES_DIR to: $VOICES_DIR"
 
-# Download model if enabled
+# ✅ Download voices if enabled
+if [ "$DOWNLOAD_VOICES" = "true" ]; then
+    echo "⬇️ Downloading voices..."
+    /app/.venv/bin/python download_voices.py
+    echo "✅ Voices downloaded."
+fi
+
+# ✅ Download model if enabled
 if [ "$DOWNLOAD_MODEL" = "true" ]; then
     echo "⬇️ Downloading model..."
     /app/.venv/bin/python docker/scripts/download_model.py --output api/src/models/v1_0
+    echo "✅ Model downloaded."
 fi
 
 echo "🚀 Starting FastAPI server..."

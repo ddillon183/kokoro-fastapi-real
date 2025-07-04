@@ -4,7 +4,6 @@ from loguru import logger
 from contextlib import asynccontextmanager
 import os
 import sys
-import subprocess
 
 from api.src.core.config import settings
 from api.src.routers.debug import router as debug_router
@@ -39,29 +38,12 @@ async def lifespan(app: FastAPI):
     from api.src.inference.model_manager import get_manager
     from api.src.inference.voice_manager import get_manager as get_voice_manager
     from api.src.services.temp_manager import cleanup_temp_files
-    import torch
-
-    if os.environ.get("DOWNLOAD_MODEL", "false").lower() == "true":
-        logger.info("Downloading model files...")
-        result = subprocess.run(["python", "docker/scripts/download_model.py", "--output", "app/models/v1_0"], capture_output=True, text=True)
-        if result.returncode != 0:
-            logger.error(f"Model download failed:\n{result.stderr}")
-            raise RuntimeError("Model download failed.")
-        logger.debug(result.stdout)
-
-    if os.environ.get("DOWNLOAD_VOICES", "false").lower() == "true":
-        logger.info("Downloading voice files...")
-        result = subprocess.run(["python", "download_voices.py"], capture_output=True, text=True)
-        if result.returncode != 0:
-            logger.error(f"Voice download failed:\n{result.stderr}")
-            raise RuntimeError("Voice download failed.")
-        logger.debug(result.stdout)
 
     voices_path = settings.voices_dir
     if not os.path.exists(voices_path):
-        logger.warning(f"Voices directory missing at {voices_path}. Voice loading may fail.")
+        logger.warning(f"❌ Voices directory missing at {voices_path}. Voice loading may fail.")
     else:
-        logger.info(f"Voices directory verified at: {voices_path}")
+        logger.info(f"✅ Voices directory verified at: {voices_path}")
 
     await cleanup_temp_files()
     logger.info("Initializing TTS model and voices...")
@@ -72,19 +54,19 @@ async def lifespan(app: FastAPI):
         device, model, voicepack_count = await model_manager.initialize_with_warmup(voice_manager)
 
         banner = (
-            "Model Initialized\n"
-            f"Model: {model}\n"
-            f"Device: {device}\n"
-            f"Voice Packs Loaded: {voicepack_count}\n"
+            "✅ Model Initialized\n"
+            f"🧠 Model: {model}\n"
+            f"💻 Device: {device}\n"
+            f"🎙️ Voice Packs Loaded: {voicepack_count}\n"
         )
 
         if settings.enable_web_player:
-            banner += f"Web Player: http://{settings.host}:{settings.port}/web/"
+            banner += f"🌐 Web Player: http://{settings.host}:{settings.port}/web/"
 
         logger.info(banner)
 
     except Exception as e:
-        logger.error(f"Failed to initialize model or voices: {e}")
+        logger.error(f"❌ Failed to initialize model or voices: {e}")
         raise
 
     yield

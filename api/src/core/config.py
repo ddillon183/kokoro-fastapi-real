@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     # Model and voice path configs (required for Kokoro)
     model_dir: str = "models/v1_0"
-    voices_dir: str = "voices/v1_0"
+    VOICES_DIR: str = Field(default="/app/voices/v1_0", env="VOICES_DIR")
 
     # API Settings
     api_title: str = "Kokoro TTS API"
