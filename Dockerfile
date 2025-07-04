@@ -72,6 +72,11 @@ ENV PYTHONUNBUFFERED=1 \
 # Clean up .pyc etc
 RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf || true
 
+# Optional: Download model in production if env var is set
+RUN if [ "$DOWNLOAD_MODEL" = "true" ]; then \
+        python docker/scripts/download_model.py --output models/v1_0; \
+    fi
+
 ENTRYPOINT ["bash", "docker/scripts/entrypoint.sh"]
 
 
