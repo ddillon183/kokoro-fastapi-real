@@ -26,3 +26,10 @@ if [ "$DOWNLOAD_MODEL" = "true" ]; then
     /app/.venv/bin/python docker/scripts/download_model.py --output models/v1_0
     echo "✅ Model downloaded."
 fi
+
+echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
+exec /app/.venv/bin/gunicorn main:app \
+  --workers 4 \
+  --worker-class uvicorn.workers.UvicornWorker \
+  --bind 0.0.0.0:8000 \
+  --timeout 120
