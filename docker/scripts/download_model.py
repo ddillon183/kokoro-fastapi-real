@@ -2,6 +2,7 @@
 """Download and prepare Kokoro v1.0 model."""
 
 import os
+import argparse
 from urllib.request import urlretrieve
 from loguru import logger
 
@@ -11,13 +12,11 @@ def verify_files(model_path: str, config_path: str) -> bool:
     return all(os.path.exists(path) and os.path.getsize(path) > 0 for path in [model_path, config_path])
 
 
-def download_model() -> None:
-    """Download Kokoro model files into models/v1_0 directory."""
+def download_model(output_dir: str) -> None:
+    """Download Kokoro model files into given directory."""
     try:
-        output_dir = "models/v1_0"
         os.makedirs(output_dir, exist_ok=True)
 
-        # Define filenames and paths
         model_file = "kokoro-v1_0.pth"
         config_file = "config.json"
         model_path = os.path.join(output_dir, model_file)
@@ -27,9 +26,8 @@ def download_model() -> None:
             logger.info("✓ Model files already exist and are valid.")
             return
 
-        logger.info("⬇️ Downloading Kokoro v1.0 model files...")
+        logger.info(f"⬇️ Downloading Kokoro model files to: {output_dir}")
 
-        # GitHub release URLs
         base_url = "https://github.com/remsky/Kokoro-FastAPI/releases/download/v0.1.4"
         urlretrieve(f"{base_url}/{model_file}", model_path)
         logger.info("✓ Downloaded model file")
@@ -37,7 +35,6 @@ def download_model() -> None:
         urlretrieve(f"{base_url}/{config_file}", config_path)
         logger.info("✓ Downloaded config file")
 
-        # Final validation
         if not verify_files(model_path, config_path):
             raise RuntimeError("Model verification failed after download.")
 
@@ -49,4 +46,8 @@ def download_model() -> None:
 
 
 if __name__ == "__main__":
-    download_model()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default="models/v1_0", help="Target directory for model files")
+    args = parser.parse_args()
+
+    download_model(args.output)
