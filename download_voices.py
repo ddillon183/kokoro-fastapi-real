@@ -1,11 +1,11 @@
 import os
 import requests
+from api.src.core.config import settings
 
-# Use a writable temp folder in Railway (inside /tmp or current dir)
-DEST_FOLDER = os.path.join(os.path.dirname(__file__), "../../tmp/voices/v1_0")
+DEST_FOLDER = settings.VOICES_DIR
 os.makedirs(DEST_FOLDER, exist_ok=True)
 
-print(f"Saving voices to: {DEST_FOLDER}")
+print(f"✅ Saving voices to: {DEST_FOLDER}")
 
 # List of tuples: (Google Drive URL, voice filename)
 voices = [
