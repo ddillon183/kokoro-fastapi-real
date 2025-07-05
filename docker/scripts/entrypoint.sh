@@ -13,23 +13,17 @@ echo "📁 Set VOICES_DIR to: $VOICES_DIR"
 echo "📦 Using Python: $(which python)"
 echo "📦 Using Uvicorn: $(which uvicorn)"
 
-# ✅ Download voices if flag is set
-if [ "$DOWNLOAD_VOICES" = "true" ]; then
-    echo "⬇️ Downloading voices..."
-    /app/.venv/bin/python download_voices.py
-    echo "✅ Voices downloaded."
-fi
+echo "⬇️ Downloading voices..."
+/app/.venv/bin/python download_voices.py
+echo "✅ Voices downloaded."
 
-# ✅ Download model if flag is set
-if [ "$DOWNLOAD_MODEL" = "true" ]; then
-    echo "⬇️ Downloading model..."
-    /app/.venv/bin/python docker/scripts/download_model.py --output models/v1_0
-    echo "✅ Model downloaded."
-fi
+echo "⬇️ Downloading model..."
+/app/.venv/bin/python docker/scripts/download_model.py --output models/v1_0
+echo "✅ Model downloaded."
 
 echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
 exec /app/.venv/bin/gunicorn main:app \
   --workers 4 \
   --worker-class uvicorn.workers.UvicornWorker \
-  --bind 0.0.0.0:8000 \
+  --bind 0.0.0.0:8880 \
   --timeout 120
