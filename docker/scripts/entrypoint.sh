@@ -25,5 +25,6 @@ echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
 exec /app/.venv/bin/gunicorn main:app \
   --workers 4 \
   --worker-class uvicorn.workers.UvicornWorker \
-  --bind 0.0.0.0:8880 \
+  --bind 0.0.0.0:$PORT \
   --timeout 120
+
