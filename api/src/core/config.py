@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     api_description: str = "API for text-to-speech generation using Kokoro"
     api_version: str = "1.0.0"
     host: str = "0.0.0.0"
-    port: int = 8880
+    port: int = int(os.environ.get("PORT", 8880))
 
     # Application Settings
     output_dir: str = "output"
@@ -33,9 +33,9 @@ class Settings(BaseSettings):
     # Audio Settings
     sample_rate: int = 24000
     # Text Processing Settings
-    target_min_tokens: int = 175  # Target minimum tokens per chunk
-    target_max_tokens: int = 250  # Target maximum tokens per chunk
-    absolute_max_tokens: int = 450  # Absolute maximum tokens per chunk
+    target_min_tokens: int = 250  # Target minimum tokens per chunk
+    target_max_tokens: int = 350  # Target maximum tokens per chunk
+    absolute_max_tokens: int = 600  # Absolute maximum tokens per chunk
     advanced_text_normalization: bool = True  # Preproesses the text before misiki
     voice_weight_normalization: bool = (
         True  # Normalize the voice weights so they add up to 1
