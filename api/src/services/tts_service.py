@@ -93,6 +93,7 @@ class TTSService:
                 if isinstance(backend, KokoroV1):
                     chunk_index = 0
                     # For Kokoro V1, pass text and voice info with lang_code
+                    start_time = time.time()
                     async for chunk_data in self.model_manager.generate(
                         chunk_text,
                         (voice_name, voice_path),
@@ -100,6 +101,8 @@ class TTSService:
                         lang_code=lang_code,
                         return_timestamps=return_timestamps,
                     ):
+                        logger.info(f"🔊 [KokoroV1] Generated chunk in {time.time() - start_time:.2f}s")
+
                         # For streaming, convert to bytes
                         if output_format:
                             try:
@@ -126,12 +129,15 @@ class TTSService:
                     voice_tensor = await self._voice_manager.load_voice(
                         voice_name, device=backend.device
                     )
+                    start_time = time.time()
                     chunk_data = await self.model_manager.generate(
                         tokens,
                         voice_tensor,
                         speed=speed,
                         return_timestamps=return_timestamps,
                     )
+                    logger.info(f"🧠 [Legacy] Generated chunk in {time.time() - start_time:.2f}s")
+
 
                     if chunk_data.audio is None:
                         logger.error("Model generated None for audio chunk")
@@ -144,7 +150,9 @@ class TTSService:
                     # For streaming, convert to bytes
                     if output_format:
                         try:
-                            chunk_data = await AudioService.convert_audio(
+                            convert_start = time.time()
+                            chunk_data = await AudioService.convert_audio(...)
+                            logger.info(f"🎧 convert_audio took {time.time() - convert_start:.2f}s")
                                 chunk_data,
                                 output_format,
                                 writer,
