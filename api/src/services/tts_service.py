@@ -151,8 +151,7 @@ class TTSService:
                     if output_format:
                         try:
                             convert_start = time.time()
-                            chunk_data = await AudioService.convert_audio(...)
-                            logger.info(f"🎧 convert_audio took {time.time() - convert_start:.2f}s")
+                            chunk_data = await AudioService.convert_audio(
                                 chunk_data,
                                 output_format,
                                 writer,
@@ -161,7 +160,9 @@ class TTSService:
                                 normalizer=normalizer,
                                 is_last_chunk=is_last,
                             )
+                            logger.info(f"🎧 convert_audio took {time.time() - convert_start:.2f}s")
                             yield chunk_data
+
                         except Exception as e:
                             logger.error(f"Failed to convert audio: {str(e)}")
                     else:
