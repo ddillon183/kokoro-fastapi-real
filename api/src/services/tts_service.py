@@ -340,8 +340,11 @@ class TTSService:
                         normalizer=stream_normalizer,
                         lang_code=pipeline_lang_code,  # Pass lang_code
                     ):
-                        if chunk_data.output is not None:
+                        if chunk_data.output is not None and len(chunk_data.output) > 0:
                             yield chunk_data
+                        else:
+                            logger.warning(f"Skipping empty chunk for: '{chunk_text[:100]}...'")
+
                 except Exception as e:
                     logger.error(f"Failed to finalize audio stream: {str(e)}")
 

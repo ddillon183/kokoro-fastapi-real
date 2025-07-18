@@ -65,13 +65,17 @@ class StreamingAudioWriter:
 
         if finalize:
             if self.format != "pcm":
-                packets = self.stream.encode(None)
-                for packet in packets:
-                    self.container.mux(packet)
-
-                data = self.output_buffer.getvalue()
-                self.close()
-                return data
+                try:
+                    packets = self.stream.encode(None)
+                    for packet in packets:
+                        self.container.mux(packet)
+                    self.container.close()
+                    data = self.output_buffer.getvalue()
+                    self.output_buffer.close()
+                    return data
+                except Exception as e:
+                    logger.error(f"Finalize failed: {str(e)}")
+                    return b""
 
         if audio_data is None or len(audio_data) == 0:
             return b""

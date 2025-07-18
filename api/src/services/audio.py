@@ -108,7 +108,7 @@ class AudioNormalizer:
         """
         if audio_data.dtype != np.int16:
             # Scale directly to int16 range with clipping
-            return np.clip(audio_data * 32767, -32768, 32767).astype(np.int16)
+            return np.clip(audio_data * 32767.0, -32768, 32767).astype(np.int16)
         return audio_data
 
 
