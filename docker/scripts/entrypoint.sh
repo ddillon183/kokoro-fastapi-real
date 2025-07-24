@@ -23,8 +23,8 @@ echo "✅ Model downloaded."
 
 echo "🚀 Starting FastAPI server with Gunicorn and 4 workers..."
 exec /app/.venv/bin/gunicorn main:app \
-  --workers 4 \
+  --workers 2 \
   --worker-class uvicorn.workers.UvicornWorker \
   --bind 0.0.0.0:8880 \
-  --timeout 240
+  --timeout 300
 
