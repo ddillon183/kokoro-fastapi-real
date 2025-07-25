@@ -26,5 +26,5 @@ exec /app/.venv/bin/gunicorn main:app \
   --workers 2 \
   --worker-class uvicorn.workers.UvicornWorker \
   --bind 0.0.0.0:8880 \
-  --timeout 300
+  --timeout 600
 
